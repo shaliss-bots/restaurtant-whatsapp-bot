@@ -62,13 +62,12 @@ with open("data.json", "r" ,
         monthly[month] += 1
     else:
         monthly[month] = 1
-        
-        data["stats"]["Monthly"] = monthly      
+    data["stats"]["Monthly"] = monthly      
                 
     
          
-      #Menu
-    elif msg == "1" or msg == "menu":
+     #Menu
+    if msg == "1" or msg == "menu":
             text = "*Full Menu*\n\n"
             
             for category, items in data ["menu"].items():
@@ -81,39 +80,39 @@ with open("data.json", "r" ,
                 reply.body(text)
                 
      #CATEGORIES
-    elif msg == "2" or msg == "categories":
+    if msg == "2" or msg == "categories":
         
             text = "*Categories*\n"
             for cat in data["categories"]:
                 text += f"-{cat}\n"
                 reply.body(text)
     #TIMING
-    elif msg == "3" or msg == "timing":
+    if msg == "3" or msg == "timing":
             t = data["timings"] 
             reply.body(
                 f"*Timings*\n{t['days']}\n{t['open']}- {t['close']}"
             )  
     #LOCATION
-    elif msg == "4" or msg == "location":
+    if msg == "4" or msg == "location":
             loc = data["location"] 
             reply.body(f"{loc['address']}\n{loc['google_map']}")
             
     # OFFERS
-    elif msg == "5" or  msg == "offers":
+    if msg == "5" or  msg == "offers":
             text = "*Today's Offers*\n"
             for offer in data["offers"]:
                 text += f"- {offer}\n"
                 reply.body(text)
     
     #CONTACT
-    elif msg == "6" or msg == "contact":
+    if msg == "6" or msg == "contact":
             c = data["contact"] 
             reply.body(
                 f"Phone: {c['phone']}\n  Whatsapp: {c['whatsapp']}"
             ) 
             
     #ORDER
-    elif msg == "7" or msg == "order":
+    if msg == "7" or msg == "order":
             reply.body(data["order_note"])
                  
     # ANY ITEM NAME 
