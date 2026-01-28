@@ -123,7 +123,7 @@ with open("data.json", "r" ,
     with open("data.json","w",encoding="utf-8") as f:
         json.dump(data,f,indent=2)
         
-        return str(resp)
+    return str(resp)
     
 if __name__ ==   "__main__":
     app.run(debug=True)                       
