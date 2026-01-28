@@ -55,19 +55,19 @@ with open("data.json", "r" ,
             
         data["stats"]["Popular_dishes"] = popular
         
-    #MONTHLY STATS
-    month = datatime.now().strftime("%Y-%m") 
-    monthly= data["stats"]["Monthly"]   
-    if month in monthly:
-        monthly[month] += 1
-    else:
-        monthly[month] = 1
-    data["stats"]["Monthly"] = monthly      
+         #MONTHLY STATS
+        month = datatime.now().strftime("%Y-%m") 
+        monthly= data["stats"]["Monthly"]   
+        if month in monthly:
+         monthly[month] += 1
+        else:
+         monthly[month] = 1
+         data["stats"]["Monthly"] = monthly      
                 
     
          
-     #Menu
-    if msg == "1" or msg == "menu":
+         #Menu
+        if msg == "1" or msg == "menu":
             text = "*Full Menu*\n\n"
             
             for category, items in data ["menu"].items():
@@ -79,49 +79,49 @@ with open("data.json", "r" ,
                 
                 reply.body(text)
                 
-     #CATEGORIES
-    if msg == "2" or msg == "categories":
+        #CATEGORIES
+            if msg == "2" or msg == "categories":
         
-            text = "*Categories*\n"
+             text = "*Categories*\n"
             for cat in data["categories"]:
                 text += f"-{cat}\n"
                 reply.body(text)
-    #TIMING
-    if msg == "3" or msg == "timing":
-            t = data["timings"] 
+            #TIMING
+            if msg == "3" or msg == "timing":
+             t = data["timings"] 
             reply.body(
                 f"*Timings*\n{t['days']}\n{t['open']}- {t['close']}"
             )  
-    #LOCATION
-    if msg == "4" or msg == "location":
-            loc = data["location"] 
+             #LOCATION
+            if msg == "4" or msg == "location":
+             loc = data["location"] 
             reply.body(f"{loc['address']}\n{loc['google_map']}")
             
-    # OFFERS
-    if msg == "5" or  msg == "offers":
-            text = "*Today's Offers*\n"
+            # OFFERS
+            if msg == "5" or  msg == "offers":
+             text = "*Today's Offers*\n"
             for offer in data["offers"]:
                 text += f"- {offer}\n"
                 reply.body(text)
     
-    #CONTACT
-    if msg == "6" or msg == "contact":
-            c = data["contact"] 
+            #CONTACT
+            if msg == "6" or msg == "contact":
+             c = data["contact"] 
             reply.body(
                 f"Phone: {c['phone']}\n  Whatsapp: {c['whatsapp']}"
             ) 
             
-    #ORDER
-    if msg == "7" or msg == "order":
-            reply.body(data["order_note"])
+             #ORDER
+            if msg == "7" or msg == "order":
+             reply.body(data["order_note"])
                  
-    # ANY ITEM NAME 
-    else:
-            reply.body(data["thank_you"])  
+            # ANY ITEM NAME 
+            else:
+             reply.body(data["thank_you"])  
             reply.body(text)
          
-    with open("data.json","w",encoding="utf-8") as f:
-        json.dump(data,f,indent=2)
+            with open("data.json","w",encoding="utf-8") as f:
+             json.dump(data,f,indent=2)
         
     return str(resp)
     
