@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 app = Flask(__name__)
 
-with open("data.json", "r" ,
+with open("src/data.json", "r" ,
         encoding="utf-8") as f:
     data = json.load(f)
     
@@ -120,7 +120,7 @@ with open("data.json", "r" ,
              reply.body(data["thank_you"])  
             reply.body(text)
          
-            with open("data.json","w",encoding="utf-8") as f:
+            with open("src/data.json","w",encoding="utf-8") as f:
              json.dump(data,f,indent=2)
         
              return str(resp)
