@@ -3,6 +3,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 from dotenv import load_dotenv
 import json
 from datetime import datetime
+import os
 app = Flask(__name__)
 
 with open("src/data.json", "r" ,
@@ -126,4 +127,5 @@ with open("src/data.json", "r" ,
              return str(resp)
     
 if __name__ ==   "__main__":
-    app.run(debug=True)                       
+    port = int(os.environ.get("PORT",5000))
+    app.run(host="0.0.0.0",port=port)                    
