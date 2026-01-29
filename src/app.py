@@ -29,19 +29,14 @@ with open("src/data.json", "r" ,
                 
             }
             
-         # LOGO IMAGE (ONLY FIRST TIME)
-            img = resp.message()
-            image_msg.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
-            text_msg = resp.message()
-        
-         # WELCOME TEXT
-            resp.message(
+        # WELCOME TEXT
+            msg = resp.message(
             "Hi, I am *Shaliss Bot*\n\n"
             "Welcome to *Royal Biryani Restaurant*\n\n"
             "Type *menu* to continue."
             )
-            return str(resp)
-    
+             # LOGO IMAGE (ONLY FIRST TIME)
+            msg.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
         else: 
             data["Customers"][phone][visits] += 1 
     
