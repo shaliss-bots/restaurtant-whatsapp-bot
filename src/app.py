@@ -78,53 +78,51 @@ with open("src/data.json", "r" ,
                 text += f"-{item['name']} : ${item['price']}\n"    
                 text += "\n"
                 
-                reply.body(text)
+                resp.message(text)
                 
-        #CATEGORIES
+            #CATEGORIES
             if msg == "2" or msg == "categories":
         
              text = "*Categories*\n"
             for cat in data["categories"]:
                 text += f"-{cat}\n"
-                reply.body(text)
+                resp.message(text)
             #TIMING
             if msg == "3" or msg == "timing":
              t = data["timings"] 
-            reply.body(
+            resp.message(
                 f"*Timings*\n{t['days']}\n{t['open']}- {t['close']}"
             )  
              #LOCATION
             if msg == "4" or msg == "location":
              loc = data["location"] 
-            reply.body(f"{loc['address']}\n{loc['google_map']}")
+            resp.message(f"{loc['address']}\n{loc['google_map']}")
             
             # OFFERS
             if msg == "5" or  msg == "offers":
              text = "*Today's Offers*\n"
             for offer in data["offers"]:
                 text += f"- {offer}\n"
-                reply.body(text)
+                resp.message(text)
     
             #CONTACT
             if msg == "6" or msg == "contact":
              c = data["contact"] 
-            reply.body(
+            resp.message(
                 f"Phone: {c['phone']}\n  Whatsapp: {c['whatsapp']}"
             ) 
             
              #ORDER
             if msg == "7" or msg == "order":
-             reply.body(data["order_note"])
+             resp.message(data["order_note"])
                  
             # ANY ITEM NAME 
             else:
-             reply.body(data["thank_you"])  
-            reply.body(text)
+             resp.message(data["thank_you"])  
+            resp.message(text)
          
-            with open("src/data.json","w",encoding="utf-8") as f:
-             json.dump(data,f,indent=2)
-        
-             return str(resp)
+
+        return str(resp)
     
 if __name__ ==   "__main__":
     port = int(os.environ.get("PORT",5000))
