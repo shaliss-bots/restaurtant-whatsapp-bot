@@ -75,46 +75,46 @@ with open("src/data.json", "r" ,
                 
                 resp.message(text)
                 
-            #CATEGORIES
-            if msg == "2" or msg == "categories":
+              #CATEGORIES
+        elif msg == "2" or msg == "categories":
         
              text = "*Categories*\n"
-            for cat in data["categories"]:
+             for cat in data["categories"]:
                 text += f"-{cat}\n"
                 resp.message(text)
             #TIMING
-            if msg == "3" or msg == "timing":
+        elif msg == "3" or msg == "timing":
              t = data["timings"] 
-            resp.message(
+             resp.message(
                 f"*Timings*\n{t['days']}\n{t['open']}- {t['close']}"
             )  
              #LOCATION
-            if msg == "4" or msg == "location":
+        elif msg == "4" or msg == "location":
              loc = data["location"] 
-            resp.message(f"{loc['address']}\n{loc['google_map']}")
+             resp.message(f"{loc['address']}\n{loc['google_map']}")
             
             # OFFERS
-            if msg == "5" or  msg == "offers":
+        elif msg == "5" or  msg == "offers":
              text = "*Today's Offers*\n"
-            for offer in data["offers"]:
+             for offer in data["offers"]:
                 text += f"- {offer}\n"
                 resp.message(text)
     
             #CONTACT
-            if msg == "6" or msg == "contact":
+        elif msg == "6" or msg == "contact":
              c = data["contact"] 
-            resp.message(
+             resp.message(
                 f"Phone: {c['phone']}\n  Whatsapp: {c['whatsapp']}"
             ) 
             
              #ORDER
-            if msg == "7" or msg == "order":
+        elif msg == "7" or msg == "order":
              resp.message(data["order_note"])
                  
-            # ANY ITEM NAME 
-            else:
+                  # ANY ITEM NAME 
+        else:
              resp.message(data["thank_you"])  
-            resp.message(text)
+             resp.message(text)
          
 
         return str(resp)
