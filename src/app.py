@@ -53,7 +53,7 @@ with open("src/data.json", "r" ,
         data["stats"]["Popular_dishes"] = popular
         
          #MONTHLY STATS
-        month = datatime.now().strftime("%Y-%m") 
+        month = datetime.now().strftime("%Y-%m") 
         monthly= data["stats"]["Monthly"]   
         if month in monthly:
          monthly[month] += 1
