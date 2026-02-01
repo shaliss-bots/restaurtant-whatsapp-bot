@@ -38,7 +38,8 @@ with open("src/data.json", "r" ,
              # LOGO IMAGE (ONLY FIRST TIME)
             msg.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
         else: 
-            data["Customers"][phone][visits] += 1 
+            data["Customers"][phone]["visits"] = data["customers"][phone].get("visits",0)+1
+        
     
             
             
