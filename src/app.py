@@ -115,7 +115,7 @@ with open("src/data.json", "r" ,
                   # ANY ITEM NAME 
         else:
              resp.message(data["bye"]["response"])  
-             resp.message(text)
+             
          
 
         return str(resp)
