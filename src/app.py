@@ -112,10 +112,26 @@ with open("src/data.json", "r" ,
              #ORDER
         elif msg == "7" or msg == "order":
              resp.message(data["order_note"])
+             
+             #bye 
+        elif msg in data["bye"]["keywords"]:
+            resp.message(data["bye"]["response"])    
                  
                   # ANY ITEM NAME 
         else:
-             resp.message(data["bye"]["response"])  
+             resp.message(
+                "Welcome to Royal Biryani Restaurant!\n\n"
+                 "Type:\n"
+                 "1 or menu\n"
+                 "2 or categories\n"
+                 "3 or timing\n"
+                 "4 or location\n"
+                 "5 or offers\n"
+                 "6 or contact\n"
+                 "7  or order"
+                 
+                 
+             )
              
          
 
