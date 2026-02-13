@@ -84,11 +84,7 @@ with open("src/data.json", "r" ,
              
             #TIMING
         elif msg == "3" or msg == "timing":
-             t = data["timings"] 
-             text =(
-                f"*Timings*\n{t['days']}\n{t['open']}- {t['close']}"
-            ) 
-             resp.message(text) 
+             resp.message(data["timing"]["response"]) 
              
              #LOCATION
         elif msg == "4" or msg == "location":
