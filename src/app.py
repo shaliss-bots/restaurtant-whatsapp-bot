@@ -68,21 +68,21 @@ with open("src/data.json", "r" ,
             text = "*Full Menu*\n\n"
             
             for category, items in data ["menu"].items():
-                text += f"*{category.upper()}*\n"
+                    text += f"*{category.upper()}*\n"
                 
-            for item in items:
-                text += f"-{item['name']} : ${item['price']}\n"    
-                text += "\n"
-                
-                resp.message(text)
+                    for item in items:
+                     text += f"-{item['name']} : ${item['price']}\n"    
+                     text += "\n"
+            resp.message(text)
                 
               #CATEGORIES
         elif msg == "2" or msg == "categories":
         
-             text = "*Categories*\n"
-             for cat in data["categories"]:
+            text = "*Categories*\n"
+            for cat in data["categories"]:
                 text += f"-{cat}\n"
-                resp.message(text)
+            resp.message(text)
+             
             #TIMING
         elif msg == "3" or msg == "timing":
              t = data["timings"] 
@@ -96,10 +96,10 @@ with open("src/data.json", "r" ,
             
             # OFFERS
         elif msg == "5" or  msg == "offers":
-             text = "*Today's Offers*\n"
-             for offer in data["offers"]:
+            text = "*Today's Offers*\n"
+            for offer in data["offers"]:
                 text += f"- {offer}\n"
-                resp.message(text)
+            resp.message(text)
     
             #CONTACT
         elif msg == "6" or msg == "contact":
