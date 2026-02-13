@@ -66,13 +66,12 @@ with open("src/data.json", "r" ,
          #Menu
         if msg == "1" or msg == "menu":
             text = "*Full Menu*\n\n"
+            text += data["veg_menu"]["response"] + "\n\n"
+            text += data["non_veg_menu"]["response"] + "\n\n"
+            text += data["snacks"]["response"] +  "\n\n"
+            text += data["drinks"]["response"] + "\n\n"
+            text += data["desserts"]["response"] 
             
-            for category, items in data ["menu"].items():
-                    text += f"*{category.upper()}*\n"
-                
-                    for item in items:
-                     text += f"-{item['name']} : ${item['price']}\n"    
-                     text += "\n"
             resp.message(text)
                 
               #CATEGORIES
@@ -86,13 +85,17 @@ with open("src/data.json", "r" ,
             #TIMING
         elif msg == "3" or msg == "timing":
              t = data["timings"] 
-             resp.message(
+             text =(
                 f"*Timings*\n{t['days']}\n{t['open']}- {t['close']}"
-            )  
+            ) 
+             resp.message(text) 
+             
              #LOCATION
         elif msg == "4" or msg == "location":
              loc = data["location"] 
-             resp.message(f"{loc['address']}\n{loc['google_map']}")
+             text = (f"{loc['address']}\n{loc['google_map']}")
+             resp.message(text)
+             
             
             # OFFERS
         elif msg == "5" or  msg == "offers":
@@ -104,10 +107,12 @@ with open("src/data.json", "r" ,
             #CONTACT
         elif msg == "6" or msg == "contact":
              c = data["contact"] 
-             resp.message(
-                f"Phone: {c['phone']}\n  Whatsapp: {c['whatsapp']}"
+             text = (
+                f"*Contact*\n" 
+                f"Phone: {c['phone']}\n"  
+                f"Whatsapp: {c['whatsapp']}"
             ) 
-            
+             resp.message(text)
              #ORDER
         elif msg == "7" or msg == "order":
              resp.message(data["order_note"])
