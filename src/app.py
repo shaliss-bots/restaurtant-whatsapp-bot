@@ -30,13 +30,16 @@ with open("src/data.json", "r" ,
             }
             
              # WELCOME TEXT
-            msg = resp.message(
+            welcome = resp.message(
             "Hi, I am *Shaliss Bot*\n\n"
             "Welcome to *Royal Biryani Restaurant*\n\n"
             "Type *menu* to continue."
             )
              # LOGO IMAGE (ONLY FIRST TIME)
-            msg.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
+            welcome.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
+            return str(resp)
+        
+        
         else: 
             data["Customers"][phone]["visits"] += 1
         
