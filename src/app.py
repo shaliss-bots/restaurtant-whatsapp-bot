@@ -87,6 +87,14 @@ with open("src/data.json", "r" ,
             for cat in data["categories"]:
                 text += f"-{cat}\n"
             resp.message(text)
+        
+        elif msg in data["categories"]:
+            
+            category = data[msg]
+            text = f"*{msg.upper()} Menu*\n\n"
+            text += category["response"]
+             
+            resp.message(text)
              
             #TIMING
         elif msg == "3" or msg == "timing":
