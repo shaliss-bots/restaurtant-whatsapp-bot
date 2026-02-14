@@ -8,12 +8,13 @@
         "response": "Type:\n veg menu\n non veg menu\n snacks\n drinks\n desserts"
     },
 
-    "veg_menu":{
+    "categories":{
+    "veg":{
         "keywords":["vegs," , "vegetarian"],
         "response": "veg menu\nPaneer butter Masala-rs.220\nVeg Biryani-rs.148\nMix veg-rs.159\n Dal tadka-rs.150\nButter Roti-rs.23"
     },
      
-    "non_veg_menu":{
+    "non_veg":{
         "keywords":["non veg", "chicken","mutton"],
         "response":"Non-veg menu\nChikenBiryani-rs.250\nButter Chiken-rs.280\nChicken Curry-rs.230\nMutton Curry-rs.320"
     },
@@ -30,8 +31,9 @@
 
     "desserts":{
         "keywords":["sweet", "dessert", "ice cream"],
-        "response":"Desserta\nGulab jamun-rs.60\nice cream-rs.50\nBrownie-rs.95\nRasgulla-rs.70"
-    },
+        "response":"Desserts\nGulab jamun-rs.60\nice cream-rs.50\nBrownie-rs.95\nRasgulla-rs.70"
+    }
+},
 
     "timing":{
         "keywords":["time", "timing","open","close"],
@@ -40,13 +42,24 @@
 
     "location":{
         "keywords":["address", "location","where"],
-        "response":"Near Main Road , City Center"
+        "response":"Near Main Road , City Center",
+        "google_map":"https//maps.google.com/?q=Near+Main+Road+City+Center"
     },
+
 
     "bye":{
         "keywords":["bye","goodbye","thanks"],
         "response":"Thank you visit again!"
     },
+      
+
+    "order_note": "Please send item name , quantity , and  address. ",
+
+    "contact" :{
+        "phone": "+919867545400",
+        "whatsapp": "919876543298"
+    },
+
 
     "Customers":{},
     "stats":{
