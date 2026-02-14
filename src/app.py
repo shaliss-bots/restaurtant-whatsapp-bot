@@ -68,14 +68,17 @@ with open("src/data.json", "r" ,
          
          #Menu
         if msg == "1" or msg == "menu":
-            text = "*Full Menu*\n\n"
-            text += data["veg_menu"]["response"] + "\n\n"
-            text += data["non_veg_menu"]["response"] + "\n\n"
-            text += data["snacks"]["response"] +  "\n\n"
-            text += data["drinks"]["response"] + "\n\n"
-            text += data["desserts"]["response"] 
+            text = ("*Menu Categories*\n\n"
+                    ". veg\n"
+                    ". Non-veg\n"
+                    ". Snacks\n"
+                    ". Drinks\n"
+                    ". Desserts\n\n"
+                    "Type category name to view items"
+                    )
             
             resp.message(text)
+            return str(resp)
                 
               #CATEGORIES
         elif msg == "2" or msg == "categories":
