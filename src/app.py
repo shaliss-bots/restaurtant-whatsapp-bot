@@ -87,6 +87,7 @@ with open("src/data.json", "r" ,
             for cat in data["categories"]:
                 text += f"-{cat}\n"
             resp.message(text)
+            return str(resp)
         
         elif msg.lower() in data["categories"]:
             

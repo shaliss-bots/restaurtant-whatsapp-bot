@@ -8,7 +8,14 @@
         "response": "Type:\n veg menu\n non veg menu\n snacks\n drinks\n desserts"
     },
 
-    "categories":{
+    "categories":[
+        "veg",
+        "non_veg",
+        "snacks",
+        "drinks",
+        "desserts"
+    ],
+
     "veg":{
         "keywords":["vegs," , "vegetarian"],
         "response": "veg menu\nPaneer butter Masala-rs.220\nVeg Biryani-rs.148\nMix veg-rs.159\n Dal tadka-rs.150\nButter Roti-rs.23"
@@ -32,8 +39,8 @@
     "desserts":{
         "keywords":["sweet", "dessert", "ice cream"],
         "response":"Desserts\nGulab jamun-rs.60\nice cream-rs.50\nBrownie-rs.95\nRasgulla-rs.70"
-    }
-},
+    },
+
 
     "timing":{
         "keywords":["time", "timing","open","close"],
