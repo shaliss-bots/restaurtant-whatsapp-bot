@@ -107,14 +107,14 @@ with open("src/data.json", "r" ,
              loc = data["location"] 
              text = (f"{loc['address']}\n{loc['google_map']}")
              resp.message(text)
+             return str(resp)
              
             
             # OFFERS
         elif msg == "5" or  msg == "offers":
-            text = "*Today's Offers*\n"
-            for offer in data["offers"]:
-                text += f"- {offer}\n"
-            resp.message(text)
+            resp.message(f"*Today`s Offers*\n{data ['offers']}")
+            return str(resp)
+        
     
             #CONTACT
         elif msg == "6" or msg == "contact":
