@@ -48,8 +48,7 @@
     },
 
     "location":{
-        "keywords":["address", "location","where"],
-        "response":"Near Main Road , City Center",
+        "address": "Near Main Road , City Center",
         "google_map":"https//maps.google.com/?q=Near+Main+Road+City+Center"
     },
 
