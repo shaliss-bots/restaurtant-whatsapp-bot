@@ -50,11 +50,13 @@ with open("src/data.json", "r" ,
             
             
      #POPULAR DISH TRACK
+        item = msg.lower()    
         popular = data["stats"]["Popular_dishes"]
-        if msg in popular:
-            popular[msg] += 1
+        
+        if item in popular:
+            popular[item] += 1
         else:
-            popular[msg] = 1
+            popular[item] = 1
             
         data["stats"]["Popular_dishes"] = popular
         
@@ -135,7 +137,9 @@ with open("src/data.json", "r" ,
                 f"Whatsapp: {c['whatsapp']}"
             ) 
              resp.message(text)
-             #ORDER
+             
+             
+        #ORDER
         elif msg == "7" or msg == "order":
              resp.message(data["order_note"])
              
@@ -150,10 +154,13 @@ with open("src/data.json", "r" ,
             text = "Stats\n\nPopular:\n"
             
             for k,v in popular.items():
-                text += "\nMonthly:\n"
+                text += f"{k}: {v}\n"
+                
+                
+            text += "\nMonthly:\n"
                 
             for k,v in monthly.items():
-                text += "f{k} : {v}\n"
+                text += f"{k}: {v}\n"
                 
                 resp.message(text)
                 return str(resp)      
