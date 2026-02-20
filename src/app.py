@@ -28,6 +28,9 @@ with open("src/data.json", "r" ,
                 "first_seen": today, "visits" : 1
                 
             }
+            with open("src/data.json", "w",
+                      encoding="utf-8") as f:
+                json.dump(data, f , indent=4)
             
              # WELCOME TEXT
             welcome = resp.message(
@@ -55,6 +58,9 @@ with open("src/data.json", "r" ,
             
         data["stats"]["Popular_dishes"] = popular
         
+        with open("src/data.json","w",encoding="utf-8") as f:
+            json.dump(data,f,indent=4)
+        
          #MONTHLY STATS
         month = datetime.now().strftime("%Y-%m") 
         monthly= data["stats"]["Monthly"]   
@@ -62,7 +68,11 @@ with open("src/data.json", "r" ,
          monthly[month] += 1
         else:
          monthly[month] = 1
-         data["stats"]["Monthly"] = monthly      
+         data["stats"]["Monthly"] = monthly 
+         
+         
+         with open("src/data.json","w",encoding="utf-8") as f:
+             json.dump(data,f,indent=4)     
                 
     
          
@@ -131,9 +141,24 @@ with open("src/data.json", "r" ,
              
              #bye 
         elif msg in data["bye"]["keywords"]:
-            resp.message(data["bye"]["response"])    
+            resp.message(data["bye"]["response"])  
+            
+        elif msg == "stats":
+            popular = data["stats"]["Popular_dishes"]
+            monthly = data["stats"]["Monthly"]
+            
+            text = "Stats\n\nPopular:\n"
+            
+            for k,v in popular.items():
+                text += "\nMonthly:\n"
+                
+            for k,v in monthly.items():
+                text += "f{k} : {v}\n"
+                
+                resp.message(text)
+                return str(resp)      
                  
-                  # ANY ITEM NAME 
+        # ANY ITEM NAME 
         else:
              resp.message(
                 "Welcome to Royal Biryani Restaurant!\n\n"
