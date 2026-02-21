@@ -21,7 +21,7 @@ This is a simple Whatsapp chatbot for restaurants.
 - Twilio WhatSApp API
 
 This project is created as a demo for client presentation.
-uiokjl, 
+
 
 
 

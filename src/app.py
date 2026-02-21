@@ -163,12 +163,21 @@ with open("src/data.json", "r" ,
                 text += f"{k}: {v}\n"
                 
                 resp.message(text)
-                return str(resp)      
-                 
-        # ANY ITEM NAME 
-        else:
-             resp.message(
-                "Welcome to Royal Biryani Restaurant!\n\n"
+                return str(resp)   
+            
+            
+            items = ["paneer butter masala","veg biryani","mix veg","dal tadka","butter roti"]
+            if msg in items:
+                
+                popular = data["stats"]["Popular_dishes"]
+                popular[msg] = popular.get(msg,0) + 1
+                data["stats"]["Popular_dishes"] = popular
+                save_data(data)
+                
+                
+          # ANY ITEM NAME 
+            resp.message(
+                "Please type menu to continue\n"
                  "Type:\n"
                  "1 or menu\n"
                  "2 or categories\n"
