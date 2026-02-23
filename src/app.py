@@ -45,38 +45,7 @@ with open("src/data.json", "r" ,
         
         else: 
             data["Customers"][phone]["visits"] += 1
-        
-    
-            
-            
-     #POPULAR DISH TRACK
-        item = msg.lower()    
-        popular = data["stats"]["Popular_dishes"]
-        
-        if item in popular:
-            popular[item] += 1
-        else:
-            popular[item] = 1
-            
-        data["stats"]["Popular_dishes"] = popular
-        
-        with open("src/data.json","w",encoding="utf-8") as f:
-            json.dump(data,f,indent=4)
-        
-         #MONTHLY STATS
-        month = datetime.now().strftime("%Y-%m") 
-        monthly= data["stats"]["Monthly"]   
-        if month in monthly:
-         monthly[month] += 1
-        else:
-         monthly[month] = 1
-         data["stats"]["Monthly"] = monthly 
-         
-         
-         with open("src/data.json","w",encoding="utf-8") as f:
-             json.dump(data,f,indent=4)     
-                
-    
+
          
          #Menu
         if msg == "1" or msg == "menu":
@@ -147,32 +116,7 @@ with open("src/data.json", "r" ,
         elif msg in data["bye"]["keywords"]:
             resp.message(data["bye"]["response"])  
             
-        elif msg == "stats":
-            popular = data["stats"]["Popular_dishes"]
-            monthly = data["stats"]["Monthly"]
-            
-            text = "Stats\n\nPopular:\n"
-            
-            for k,v in popular.items():
-                text += f"{k}: {v}\n"
-                
-                
-            text += "\nMonthly:\n"
-                
-            for k,v in monthly.items():
-                text += f"{k}: {v}\n"
-                
-                resp.message(text)
-                return str(resp)   
-            
-            
-            items = ["paneer butter masala","veg biryani","mix veg","dal tadka","butter roti"]
-            if msg in items:
-                
-                popular = data["stats"]["Popular_dishes"]
-                popular[msg] = popular.get(msg,0) + 1
-                data["stats"]["Popular_dishes"] = popular
-                save_data(data)
+        
                 
                 
           # ANY ITEM NAME 
