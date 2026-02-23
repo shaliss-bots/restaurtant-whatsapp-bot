@@ -112,14 +112,13 @@ with open("src/data.json", "r" ,
         elif msg == "7" or msg == "order":
              resp.message(data["order_note"])
              
-             #bye 
+        #bye 
         elif msg in data["bye"]["keywords"]:
             resp.message(data["bye"]["response"])  
             
         
-                
-                
-          # ANY ITEM NAME 
+         # ANY ITEM NAME 
+        else:  
             resp.message(
                 "Please type menu to continue\n"
                  "Type:\n"
@@ -134,9 +133,8 @@ with open("src/data.json", "r" ,
                  
              )
              
-         
-
-        return str(resp)
+             
+            return str(resp)
     
 if __name__ ==   "__main__":
     port = int(os.environ.get("PORT",5000))
