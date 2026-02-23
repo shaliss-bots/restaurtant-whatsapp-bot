@@ -82,6 +82,7 @@ with open("src/data.json", "r" ,
             #TIMING
         elif msg == "3" or msg == "timing":
              resp.message(data["timing"]["response"]) 
+             return str(resp)
              
              #LOCATION
         elif msg == "4" or msg == "location":
@@ -106,11 +107,13 @@ with open("src/data.json", "r" ,
                 f"Whatsapp: {c['whatsapp']}"
             ) 
              resp.message(text)
+             return str(resp)
              
              
         #ORDER
         elif msg == "7" or msg == "order":
              resp.message(data["order_note"])
+             return str(resp)
              
         #bye 
         elif msg in data["bye"]["keywords"]:
@@ -132,8 +135,6 @@ with open("src/data.json", "r" ,
                  
                  
              )
-             
-             
             return str(resp)
     
 if __name__ ==   "__main__":
