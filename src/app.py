@@ -78,6 +78,15 @@ with open("src/data.json", "r" ,
              
             resp.message(text)
             return str(resp)
+        
+            # ITEM CHECK 
+            for cat in data["categories"]:
+                items = data["categories"][cat]["items"]
+                
+                for item in items:
+                    if msg.lower() == item.lower():
+                        resp.message(f"{item}   added  to order ")
+                        return str(resp)
              
             #TIMING
         elif msg == "3" or msg == "timing":
@@ -123,8 +132,7 @@ with open("src/data.json", "r" ,
          # ANY ITEM NAME 
         else:  
             resp.message(
-                "Please type menu to continue\n"
-                 "Type:\n"
+                "Sorry, I didn't understand.Type menu\n"
                  "1 or menu\n"
                  "2 or categories\n"
                  "3 or timing\n"
