@@ -78,15 +78,15 @@ with open("src/data.json", "r" ,
             text += category["response"]
              
             resp.message(text)
-            return str(resp)
+            
         
          # ITEM CHECK 
-        elif True:   
+     
             for cat in data["categories"]:
                 items = data[cat]["Items"]
                 
                 for item in items:
-                    if msg.lower() == item.lower():
+                    if msg.lower() in item.lower():
                         resp.message(f"{item}   added  to order ")
                         return str(resp)
              
