@@ -86,7 +86,7 @@ with open("src/data.json", "r" ,
                 items = data[cat]["Items"]
                 
                 for item in items:
-                    if msg.lower() == item.lower():
+                    if msg.lower().strip() == item.lower().strip():
                         resp.message(f"{item}   added  to order ")
                         return str(resp)
              
