@@ -80,7 +80,8 @@ with open("src/data.json", "r" ,
             resp.message(text)
             return str(resp)
         
-        # ITEM CHECK 
+         # ITEM CHECK 
+        elif True:   
             for cat in data["categories"]:
                 items = data[cat]["Items"]
                 
