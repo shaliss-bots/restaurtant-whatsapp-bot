@@ -70,6 +70,7 @@ with open("src/data.json", "r" ,
             resp.message(text)
             return str(resp)
         
+
         elif msg.lower() in data["categories"]:
             
             category = data[msg.lower()]
@@ -79,7 +80,7 @@ with open("src/data.json", "r" ,
             resp.message(text)
             return str(resp)
         
-            # ITEM CHECK 
+        # ITEM CHECK 
             for cat in data["categories"]:
                 items = data[cat]["Items"]
                 
