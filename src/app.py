@@ -73,7 +73,7 @@ with open("src/data.json", "r" ,
 
         elif msg.lower().strip() in data["categories"]:
             
-            category = data[msg.lower()]
+            category = data["categories"][msg.lower()]
             text = f"*{msg.upper()} Menu*\n\n"
             text += category["response"]
              
