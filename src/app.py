@@ -78,7 +78,7 @@ with open("src/data.json", "r" ,
             text += category["response"]
              
             resp.message(text)
-            
+            return str(resp)
         
          # ITEM CHECK 
      
