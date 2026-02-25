@@ -71,7 +71,7 @@ with open("src/data.json", "r" ,
             return str(resp)
         
 
-        elif msg.lower() in data["categories"]:
+        elif msg.lower().strip() in data["categories"]:
             
             category = data[msg.lower()]
             text = f"*{msg.upper()} Menu*\n\n"
@@ -86,7 +86,7 @@ with open("src/data.json", "r" ,
                 items = data[cat]["Items"]
                 
                 for item in items:
-                    if msg.lower() in item.lower():
+                    if msg.lower() == item.lower():
                         resp.message(f"{item}   added  to order ")
                         return str(resp)
              
