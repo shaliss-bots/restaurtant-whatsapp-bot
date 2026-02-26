@@ -134,7 +134,7 @@ with open("src/data.json", "r" ,
          # ANY ITEM NAME 
         else:  
             resp.message(
-                "Sorry, I didn't understand.Type menu\n"
+                "Sorry, I didn't understand.Type menu.MYY LIFE\n"
                  "1 or menu\n"
                  "2 or categories\n"
                  "3 or timing\n"
