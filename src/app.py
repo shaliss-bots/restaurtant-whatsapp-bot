@@ -68,17 +68,9 @@ with open("src/data.json", "r" ,
             for cat in data["categories"]:
                 text += f"-{cat}\n"
             resp.message(text)
-            return str(resp)
+            return str(resp) 
         
-
-        elif msg.lower().strip() in data.keys():
-            
-            category = data[msg.lower().strip()]
-            text = f"*{msg.upper()} Menu*\n\n"
-            text += category["response"]
-             
-            resp.message(text)
-            return str(resp)
+        
         
          # ITEM CHECK 
      
@@ -89,6 +81,16 @@ with open("src/data.json", "r" ,
                     if msg.lower().strip() == item.lower().strip():
                         resp.message(f"{item} added to order ")
                         return str(resp)
+
+        elif msg.lower().strip() in data.keys():
+            
+            category = data[msg.lower().strip()]
+            text = f"*{msg.upper()} Menu*\n\n"
+            text += category["response"]
+             
+            resp.message(text)
+            return str(resp)
+        
              
             #TIMING
         elif msg == "3" or msg == "timing":
