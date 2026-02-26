@@ -74,11 +74,10 @@ with open("src/data.json", "r" ,
         
          # ITEM CHECK 
      
-            for cat in data.values():
-                items = cat["Items"]
+            for cat_name, cat_data in data["categories"].items():
                 
-                for item in items:
-                    if msg.lower().strip() == item.lower().strip():
+                    for item in cat_data["Items"]:
+                       if msg.lower().strip() == item.lower().strip():
                         resp.message(f"{item} added to order ")
                         return str(resp)
 
