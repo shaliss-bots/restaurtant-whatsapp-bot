@@ -11,49 +11,30 @@
     "categories":{
     "veg":{
         "keywords":["vegs," , "vegetarian"],
-        "response": "veg menu\nPaneer butter Masala-rs.220\nVeg Biryani-rs.148\nMix veg-rs.159\n Dal tadka-rs.150\nButter Roti-rs.23",
-         "Items":["Paneer butter Masala",
-                   "Veg Biryani",
-                    "Mix veg",
-                     "Dal tadka",
-                    "Butter Roti" ]
+        "response": "veg menu\nPaneer butter Masala-rs.220\nVeg Biryani-rs.148\nMix veg-rs.159\n Dal tadka-rs.150\nButter Roti-rs.23"
+         
     },
      
     "non_veg":{
         "keywords":["non veg", "chicken","mutton"],
-        "response":"Non-veg menu\nChiken Biryani-rs.250\nButter Chiken-rs.280\nChicken Curry-rs.230\nMutton Curry-rs.320",
-        "Items" : ["Chicken Biryani",
-                    "Butter Chicken",
-                    "Chicken Curry",
-                    "Mutton Curry"   ]  
+        "response":"Non-veg menu\nChiken Biryani-rs.250\nButter Chiken-rs.280\nChicken Curry-rs.230\nMutton Curry-rs.320"
+        
  },
     "snacks":{
         "keywords":["snacks","starter", "fast food"],
-        "response":"Snacks\nSamosa-rs.25\nFrench fries-rs.40\nVeg Roll-rs.50\nChicken Roll-rs.80\nSpring Roll-rs.90",
-        "Items": [ "Samosa",
-                    "French fries",
-                    "Veg Roll",
-                    "Chicken Roll",
-                    "Spring Roll"]   
+        "response":"Snacks\nSamosa-rs.25\nFrench fries-rs.40\nVeg Roll-rs.50\nChicken Roll-rs.80\nSpring Roll-rs.90"  
     },
 
     "drinks":{
         "keywords":["drinks","drinks","beverage"],
-        "response":"Drinks\nCold Drink-rs.45\nFresh Lime-rs.35\nTea-rs.30\nCoffee-rs.60\nMilkshake-rs.50",
-        "Items" : ["Cold Drink",
-                    "Fresh Lime",
-                     "Tea" ,
-                    "Coffee",
-                "Milkshake"  ]
+        "response":"Drinks\nCold Drink-rs.45\nFresh Lime-rs.35\nTea-rs.30\nCoffee-rs.60\nMilkshake-rs.50"
+    
     },
 
     "desserts":{
         "keywords":["sweet", "dessert", "ice cream"],
-        "response":"Desserts\nGulab jamun-rs.60\nice cream-rs.50\nBrownie-rs.95\nRasgulla-rs.70",
-        "Items":  ["Gulab jamun",
-                    "ice cream",
-                      "Brownie",
-                        "Rasgulla"]
+        "response":"Desserts\nGulab jamun-rs.60\nice cream-rs.50\nBrownie-rs.95\nRasgulla-rs.70"
+        
     }
     },
 
@@ -84,9 +65,6 @@
     "offers": "Weekend offers - 40% to 70% OFF , ON tuesday-45 , BUY ONE GET ONE FREE",
 
 
-    "Customers":{},
-    "stats":{
-        "Monthly":{},
-        "Popular_dishes":{}
-    }
+    "Customers":{}
+    
 }

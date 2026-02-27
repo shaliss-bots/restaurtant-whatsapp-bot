@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 import os
 app = Flask(__name__)
-order_list = []
+
 
 with open("src/data.json", "r" ,
         encoding="utf-8") as f:
@@ -63,18 +63,8 @@ with open("src/data.json", "r" ,
             resp.message(text)
             return str(resp)
         
-        
-         # ITEM CHECK 
-     
-            for cat_name, cat_data in data["categories"].items():
                 
-                    for item in cat_data["Items"]:
-                       if msg == item.lower():
-                        order_list.append(item)
-                        resp.message(f"{item} added\nType 7 to view order")
-                        return str(resp)
-                
-              #CATEGORIES
+            #CATEGORIES
         elif msg == "2" or msg == "categories":
         
             text = "*Categories*\n"
@@ -128,31 +118,9 @@ with open("src/data.json", "r" ,
              
         #ORDER
         elif msg == "7" or msg == "order":
-            
-            if len(order_list)  == 0:
-             resp.message("your cart empty")
-             return str(resp)
-         
-            text = "*Your Order*\n\n"
-            
-            for i in order_list:
-                text += f" - {i}\n"
-                
-            text += "\nType YES to confirm"
-            
-            resp.message(text)
+            resp.message("Your order request received.Restaurant will contact you soon.")
             return str(resp)
-        
-        #confirm
-        elif msg == "yes":
-            if len(order_list) == 0:
-                resp.message("No order")
-                return str(resp)
-            
-            resp.message("0rder Confirmed\nThank you")
-            order_list.clear()
-            return str(resp)   
-        
+    
         
         #bye 
         elif msg in data["bye"]["keywords"]:
