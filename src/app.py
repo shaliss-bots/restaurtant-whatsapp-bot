@@ -73,18 +73,7 @@ with open("src/data.json", "r" ,
             return str(resp) 
         
         
-        
-        elif msg.lower().strip() in data["categories"]:
-            category = data["categories"][msg.lower().strip()]
-            
-            text = f"*{msg.upper()} Menu*\n\n"
-            text += category["response"]
-             
-            resp.message(text)
-            return str(resp)
-        
-        
-        # ITEM CHECK 
+         # ITEM CHECK 
      
             for cat_name, cat_data in data["categories"].items():
                 
@@ -93,6 +82,17 @@ with open("src/data.json", "r" ,
                         order_list.append(item)
                         resp.message(f"{item} added\nType 7 to view order")
                         return str(resp)
+                    
+                    
+        
+        elif msg in data["categories"]:
+            category = data["categories"][msg]
+            
+            text = f"*{msg.upper()} Menu*\n\n"
+            text += category["response"]
+             
+            resp.message(text)
+            return str(resp)
         
         
             #TIMING
