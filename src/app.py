@@ -62,6 +62,17 @@ with open("src/data.json", "r" ,
             
             resp.message(text)
             return str(resp)
+        
+        
+         # ITEM CHECK 
+     
+            for cat_name, cat_data in data["categories"].items():
+                
+                    for item in cat_data["Items"]:
+                       if msg == item.lower():
+                        order_list.append(item)
+                        resp.message(f"{item} added\nType 7 to view order")
+                        return str(resp)
                 
               #CATEGORIES
         elif msg == "2" or msg == "categories":
@@ -70,18 +81,7 @@ with open("src/data.json", "r" ,
             for cat in data["categories"]:
                 text += f"-{cat}\n"
             resp.message(text)
-            return str(resp) 
-        
-        
-         # ITEM CHECK 
-     
-            for cat_name, cat_data in data["categories"].items():
-                
-                    for item in cat_data["Items"]:
-                       if item.lower() in msg :
-                        order_list.append(item)
-                        resp.message(f"{item} added\nType 7 to view order")
-                        return str(resp)
+            return str(resp)
                     
                     
         
