@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 import os
 app = Flask(__name__)
+order_list = []
 
 with open("src/data.json", "r" ,
         encoding="utf-8") as f:
@@ -17,6 +18,7 @@ with open("src/data.json", "r" ,
 
     @app.route("/whatsapp", methods=["POST"])
     def whatsapp_bot():
+        global order_list
         msg = request.form.get("Body").strip().lower()
         resp = MessagingResponse()
         sender = request.form.get("From")
@@ -88,7 +90,8 @@ with open("src/data.json", "r" ,
                 
                     for item in cat_data["Items"]:
                        if msg.lower().strip() == item.lower().strip():
-                        resp.message(f"{item} added to order ")
+                        order_list.append(item)
+                        resp.message(f"{item} added\nType 7 to view order")
                         return str(resp)
         
         
@@ -125,9 +128,32 @@ with open("src/data.json", "r" ,
              
         #ORDER
         elif msg == "7" or msg == "order":
-             resp.message(data["order_note"])
+            
+            if len(order_list)  == 0:
+             resp.message("your cart empty")
              return str(resp)
-             
+         
+            text = "*Your Order*\n\n"
+            
+            for i in order_list:
+                text += f" - {i}\n"
+                
+            text += "\nType YES to confirm"
+            
+            resp.message(text)
+            return str(resp)
+        
+        #confirm
+        elif msg == "yes":
+            if len(order_list) == 0:
+                resp.message("No order")
+                return str(resp)
+            
+            resp.message("0rder Confirmed\nThank you")
+            order_list.clear()
+            return str(resp)   
+        
+        
         #bye 
         elif msg in data["bye"]["keywords"]:
             resp.message(data["bye"]["response"])  

@@ -8,14 +8,7 @@
         "response": "Type:\n veg menu\n non veg menu\n snacks\n drinks\n desserts"
     },
 
-    "categories":[
-        "veg",
-        "non_veg",
-        "snacks",
-        "drinks",
-        "desserts"
-    ],
-
+    "categories":{
     "veg":{
         "keywords":["vegs," , "vegetarian"],
         "response": "veg menu\nPaneer butter Masala-rs.220\nVeg Biryani-rs.148\nMix veg-rs.159\n Dal tadka-rs.150\nButter Roti-rs.23",
@@ -35,7 +28,7 @@
                     "Mutton Curry"   ]  
  },
     "snacks":{
-        "keywords":["Snacks","Starter", "Fast food"],
+        "keywords":["snacks","starter", "fast food"],
         "response":"Snacks\nSamosa-rs.25\nFrench fries-rs.40\nVeg Roll-rs.50\nChicken Roll-rs.80\nSpring Roll-rs.90",
         "Items": [ "Samosa",
                     "French fries",
@@ -61,8 +54,8 @@
                     "ice cream",
                       "Brownie",
                         "Rasgulla"]
+    }
     },
-
 
     "timing":{
         "keywords":["time", "timing","open","close"],
