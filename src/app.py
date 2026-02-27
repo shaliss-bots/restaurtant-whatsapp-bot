@@ -78,7 +78,7 @@ with open("src/data.json", "r" ,
             for cat_name, cat_data in data["categories"].items():
                 
                     for item in cat_data["Items"]:
-                       if msg in item.lower():
+                       if item.lower() in msg :
                         order_list.append(item)
                         resp.message(f"{item} added\nType 7 to view order")
                         return str(resp)
