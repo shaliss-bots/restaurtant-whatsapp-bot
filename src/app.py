@@ -26,7 +26,7 @@ with open("src/data.json", "r" ,
         today = datetime.now().strftime("%Y-%m-%d")
         
         if phone not in data["Customers"]:
-            data["Customers"][phone] ={
+            data["Customers"][phone] = {
                 "first_seen": today, "visits" : 1
                 
             }
@@ -42,7 +42,7 @@ with open("src/data.json", "r" ,
             )
              # LOGO IMAGE (ONLY FIRST TIME)
             welcome.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
-            return str(resp)
+            
         
         
         else: 
