@@ -17,8 +17,7 @@ with open("src/data.json", "r" ,
         return "Service is running"
 
     @app.route("/whatsapp", methods=["POST"])
-    def whatsapp_bot():
-        global order_list
+    def whatsapp_bot(): 
         msg = request.form.get("Body").strip().lower()
         resp = MessagingResponse()
         sender = request.form.get("From")
@@ -65,7 +64,7 @@ with open("src/data.json", "r" ,
         
                 
             #CATEGORIES
-        elif msg == "2" or msg == "categories":
+        elif msg in ["2", "categories" , "category"]:
         
             text = "*Categories*\n"
             for cat in data["categories"]:
@@ -129,20 +128,12 @@ with open("src/data.json", "r" ,
         
          # ANY ITEM NAME 
         else:  
-            resp.message(
-                "Sorry, I didn't understand.Type menu.MYY LIFE\n"
-                 "1 or menu\n"
-                 "2 or categories\n"
-                 "3 or timing\n"
-                 "4 or location\n"
-                 "5 or offers\n"
-                 "6 or contact\n"
-                 "7  or order"
-                 
-                 
-             )
-            return str(resp)
-    
+            confused_words = ["?" , "help", "kya", "kaise"]
+            
+            if any(word in msg for word in confused_words):
+                resp.message("Sorry Type *menu* to continue.")
+            return str(resp)    
+           
 if __name__ ==   "__main__":
     port = int(os.environ.get("PORT",5000))
     app.run(host="0.0.0.0",port=port)                  
