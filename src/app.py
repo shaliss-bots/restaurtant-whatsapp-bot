@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 import os
 app = Flask(__name__)
+orders = {}
 
 
 with open("src/data.json", "r" ,
@@ -32,6 +33,11 @@ with open("src/data.json", "r" ,
             with open("src/data.json", "w",
                       encoding="utf-8") as f:
                 json.dump(data, f , indent=4)
+                
+                
+                # cart initialization
+            if phone not in orders:
+                orders[phone] =[]    
             
              # WELCOME TEXT
             welcome = resp.message(
@@ -86,6 +92,34 @@ with open("src/data.json", "r" ,
             return str(resp)
         
         
+          #item add block
+        elif msg in data["items"]:
+            orders[phone].append(msg)
+            resp.message(f" {msg.title()} added to cart.")
+            return str(resp)
+        
+        
+        
+         # show order
+        elif msg == "show order":
+            
+            if not orders[phone]:
+                resp.message("Your cart is empty.")
+                return str(resp)
+            
+            text = " *Your Current Order*\n\n"
+            total = 0
+            
+            for i, item in enumerate(orders[phone], 1):
+                price = data["items"][item]
+                text += f"{i}. {item.title()} - $ {price}\n"
+                total += price
+                text += f"\n Total: ${total}"
+                
+                resp.message(text)
+                return str(resp)  
+        
+        
             #TIMING
         elif msg == "3" or msg == "timing":
              resp.message(data["timing"]["response"]) 
@@ -119,10 +153,27 @@ with open("src/data.json", "r" ,
              
         #ORDER
         elif msg == "7" or msg == "order":
-            resp.message("Your order request received.Restaurant will contact you soon.")
-            return str(resp)
-    
-        
+            if not orders[phone]:
+                resp.message("Your cart is empty.")
+                return str(resp)
+            total = 0
+            text = "*Order Confirmed*\n\n"
+            
+            for i, item in enumerate(orders[phone], 1):
+                price = data["items"][item]
+                text += f"{i}. {item.title()} -$ {price}\n"
+                total += price
+                
+                text += f"\nTotal: ${total}"
+                text += "\n\nRestaurant will contact you soon."
+                
+                resp.message(text)
+                
+                # Clear cart after order 
+                orders[phone] = []
+                
+                return str(resp)
+         
         #bye 
         elif msg in data["bye"]["keywords"]:
             resp.message(data["bye"]["response"])  

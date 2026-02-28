@@ -38,6 +38,37 @@
     }
     },
 
+    "items": {
+        "paneer butter masala":220,
+        "veg biryani": 148,
+        "mix veg":159,
+        "dal tadka":150,
+        "butter roti":23,
+
+        "chicken biryani":250,
+        "butter chicken":280,
+        "chicken curry":230,
+        "mutton curry":320,
+
+        "samosa":25,
+        "french fries":40,
+        "veg roll":50,
+        "chicken roll":80,
+        "spring roll":90,
+
+        "cold drink":45,
+        "fresh lime":35,
+        "tea":30,
+        "coffee":60,
+        "milkshake":50,
+
+         "gulab jamun":60,
+         "ice cream":50,
+         "brownie":95,
+         "rasgulla":70
+
+   },
+
     "timing":{
         "keywords":["time", "timing","open","close"],
         "response":"We are open from 10AM to 11PM"
