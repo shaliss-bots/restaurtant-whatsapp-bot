@@ -33,11 +33,7 @@ with open("src/data.json", "r" ,
             with open("src/data.json", "w",
                       encoding="utf-8") as f:
                 json.dump(data, f , indent=4)
-                
-                
-                # cart initialization
-            if phone not in orders:
-                orders[phone] =[]    
+                 
             
              # WELCOME TEXT
             welcome = resp.message(
@@ -94,6 +90,10 @@ with open("src/data.json", "r" ,
         
           #item add block
         elif msg in data["items"]:
+            
+            if phone not in orders:
+                orders[phone] = []
+                
             orders[phone].append(msg)
             resp.message(f" {msg.title()} added to cart.")
             return str(resp)
