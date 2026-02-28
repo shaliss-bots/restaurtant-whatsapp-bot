@@ -50,13 +50,15 @@ with open("src/data.json", "r" ,
          
          #Menu
         if msg == "1" or msg == "menu":
-            text = ("*Menu Categories*\n\n"
-                    ". veg\n"
-                    ". Non-veg\n"
-                    ". Snacks\n"
-                    ". Drinks\n"
-                    ". Desserts\n\n"
-                    "Type category name to view items"
+            text = ("*  Main Menu *\n\n"
+                    "1 or menu\n"
+                    "2 or category\n"
+                    "3 or timing\n"
+                    "4 or  location\n"
+                    "5 or  offers\n"
+                    "6 or contact\n"
+                    "7 or order\n\n"
+                    "Type any option to continue."
                     )
             
             resp.message(text)
@@ -64,7 +66,7 @@ with open("src/data.json", "r" ,
         
                 
             #CATEGORIES
-        elif msg in ["2", "categories" , "category"]:
+        elif msg.startswith("2") or "category" in msg:
         
             text = "*Categories*\n"
             for cat in data["categories"]:
