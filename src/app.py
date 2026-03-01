@@ -4,8 +4,21 @@ from dotenv import load_dotenv
 import json
 from datetime import datetime
 import os
+import sqlite3
 app = Flask(__name__)
-orders = {}
+
+conn = sqlite3.connect("database.db",check_same_thread=False)
+cursor = conn.cursor()
+
+cursor.execute("""
+               CREATE TABLE IF NOT EXISTS cart( id INTEGER PRIMARY KEY AUTOINCREMENT,
+               phone TEXT,
+               item TEXT,
+               price INTEGER
+              )     
+            """ )
+conn.commit()
+
 
 
 with open("src/data.json", "r" ,
@@ -91,10 +104,12 @@ with open("src/data.json", "r" ,
           #item add block
         elif msg in data["items"]:
             
-            if phone not in orders:
-                orders[phone] = []
-                
-            orders[phone].append(msg)
+            price = data["items"][msg]
+            cursor.execute(
+                "INSERT INTO cart (phone , item, price ) VALUES (?, ?, ?)",
+                (phone, msg, price)
+            )
+            conn.commit()
             resp.message(f" {msg.title()} added to cart.")
             return str(resp)
         
@@ -103,21 +118,30 @@ with open("src/data.json", "r" ,
          # show order
         elif msg == "show order":
             
-            if not orders[phone]:
+            cursor.execute(
+                "SELECT item, price FROM cart WHERE phone = ?",
+                (phone,)
+            )
+            items = cursor.fetchall()
+            
+            if not items:
                 resp.message("Your cart is empty.")
                 return str(resp)
             
             text = " *Your Current Order*\n\n"
             total = 0
             
-            for i, item in enumerate(orders[phone], 1):
-                price = data["items"][item]
-                text += f"{i}. {item.title()} - $ {price}\n"
-                total += price
-                text += f"\n Total: ${total}"
+            for i, row in enumerate(items, 1):
+                item_name = row[0]
+                price = row[1]
                 
-                resp.message(text)
-                return str(resp)  
+                text += f"{i}. {item_name.title()} - $ {price}\n"
+                total += price
+                
+            text += f"\n Total: ${total}"
+                
+            resp.message(text)
+            return str(resp)  
         
         
             #TIMING
@@ -153,26 +177,37 @@ with open("src/data.json", "r" ,
              
         #ORDER
         elif msg == "7" or msg == "order":
-            if not orders[phone]:
+            
+            cursor.execute(
+                "SELECT item, price FROM cart WHERE phone = ?",
+                (phone,)
+            )
+            items = cursor.fetchall()
+            
+            if not items:
                 resp.message("Your cart is empty.")
                 return str(resp)
+            
             total = 0
             text = "*Order Confirmed*\n\n"
             
-            for i, item in enumerate(orders[phone], 1):
-                price = data["items"][item]
-                text += f"{i}. {item.title()} -$ {price}\n"
+            for i, row in enumerate(items, 1):
+                item_name = row[0]
+                price = row[1]
+                
+                text += f"{i}. {item_name.title()} -$ {price}\n"
                 total += price
                 
-                text += f"\nTotal: ${total}"
-                text += "\n\nRestaurant will contact you soon."
+            text += f"\nTotal: ${total}"
+            text += "\n\nRestaurant will contact you soon."
                 
-                resp.message(text)
+            resp.message(text)
                 
                 # Clear cart after order 
-                orders[phone] = []
+            cursor.execute("DELETE FROM cart WHERE phone = ?", (phone,))
+            conn.commit()
                 
-                return str(resp)
+            return str(resp)
          
         #bye 
         elif msg in data["bye"]["keywords"]:
