@@ -41,7 +41,7 @@ conn.commit()
 
 
 
-with open("src\data.json", "r" ,
+with open("data.json", "r" ,
         encoding="utf-8") as f:
     data = json.load(f)
     
