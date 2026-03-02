@@ -17,11 +17,31 @@ cursor.execute("""
                price INTEGER
               )     
             """ )
+
+cursor.execute("""
+               CREATE TABLE IF NOT EXISTS  customers (
+                   phone TEXT PRIMARY KEY,
+                   name TEXT,
+                   first_order_date TEXT,
+                   total_orders INTEGER
+                 )  
+           """ )
+
+cursor.execute("""
+               CREATE TABLE IF NOT EXISTS orders (
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
+                   phone TEXT,
+                   item TEXT,
+                   price INTEGER,
+                   date TEXT
+                 )  
+             """ )
+
 conn.commit()
 
 
 
-with open("src/data.json", "r" ,
+with open("src\data.json", "r" ,
         encoding="utf-8") as f:
     data = json.load(f)
     
@@ -190,6 +210,7 @@ with open("src/data.json", "r" ,
             
             total = 0
             text = "*Order Confirmed*\n\n"
+            text += f"Customer Type: {customer_type}\n\n"
             
             for i, row in enumerate(items, 1):
                 item_name = row[0]
@@ -200,8 +221,39 @@ with open("src/data.json", "r" ,
                 
             text += f"\nTotal: ${total}"
             text += "\n\nRestaurant will contact you soon."
+            
+            # TRACKING START HERE ====
+            
+            today = datatime.now().strftime("%Y-%m-%d")
+            
+            cursor.execute("SELECT * FROM customers WHERE phone = ?", (phone ,))
+            existing = cursor.fetchone()
+            
+            if existing:
+                cursor.execute("""
+                               UPDATE customers
+                               SET total_orders = total_orders + 1
+                               WHERE phone = ? """ , (phone,))
+                customer_type = "Repeat Customer"
+                
+            else:
+                cursor.execute("""
+                               INSERT INTO customers (phone,
+                               name, first_order_date, total_orders) VALUES (?,?,? , 1)
+                               """, (phone, "Guest", today)) 
+                customer_type = "New Customer" 
+                
+            for row in items:
+                cursor.execute("""
+                               INSERT INTO orders (phone, item, price, date) VALUES (?,?,?,?)
+                               """, (phone, row[0], row[1], today)) 
+            
+            conn.commit()   
+            
+            # tracking end here=====    
                 
             resp.message(text)
+            
                 
                 # Clear cart after order 
             cursor.execute("DELETE FROM cart WHERE phone = ?", (phone,))
@@ -220,7 +272,59 @@ with open("src/data.json", "r" ,
             
             if any(word in msg for word in confused_words):
                 resp.message("Sorry Type *menu* to continue.")
-            return str(resp)    
+            return str(resp)   
+        
+    
+    @app.route("/admin")
+    def admin_dashbord():
+        
+        #TOTAL Customers 
+        cursor.execute("SELECT COUNT(*) FROM customers")
+        total_customers = cursor.fetchone()[0]
+        
+        # total Orders 
+        cursor.excute("SELECT COUNT(*) FROM orders")
+        total_orders = cursor.fetchone()[0]
+        
+        #MONTHLY ORDERS 
+        cursor.execute("""
+                       SELECT COUNT(*) FROM orders WHERE strftime('%m', 'now')""")
+        monthly_orders = cursor.fetchone()[0]
+        
+        # New customers this month 
+        cursor.execute("""
+                       SELECT COUNT(*) FROM customers WHERE strftime('%m','now')""")
+        monthly_new = cursor.fetchone()[0]
+        
+        #Repeat Customers 
+        cursor.execute("""
+                       SELECT COUNT(*) FROM customers  WHERE total_orders > 1 """)   
+        repeat_customers = cursor.fetchone()[0]
+        
+        # Most Popular Dish 
+        cursor.execute("""
+                       SELECT items, COUNT(*) as total FROM orders GROUP BY item ORDER BY total DESC LIMIT 1 """) 
+        popular = cursor.fetchone()
+        
+        popular_item = popular[0] if popular else "NO orders yet"
+        
+        
+        return f"""
+         <h2>Owner Dashboard</h2>
+         <p>Total Customers: {total_customers} </p>
+         <p>Total Orders: {total_orders}</p>
+         <p>Monthly Orders: {monthly_orders}</p>
+         
+         <p>New Customers This Month:
+         {monthly_new}</p>
+         <p>Repeat Customers:
+         {repeat_customers}</p>
+          <p>Most Popular Dish: {popular_item}</p>
+          
+          """ 
+              
+    
+ 
            
 if __name__ ==   "__main__":
     port = int(os.environ.get("PORT",5000))
