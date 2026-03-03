@@ -87,7 +87,7 @@ with open(data_path, "r" ,
          
          #Menu
         if msg == "1" or msg == "menu":
-            text = ("*  Main Menu *\n\n"
+            text = ("*Main Menu*\n\n"
                     "1 or menu\n"
                     "2 or category\n"
                     "3 or timing\n"
@@ -214,7 +214,7 @@ with open(data_path, "r" ,
             
             # TRACKING START HERE ====
             total = 0
-            today = datatime.now().strftime("%Y-%m-%d")
+            today = datetime.now().strftime("%Y-%m-%d")
             
             cursor.execute("SELECT * FROM customers WHERE phone = ?", (phone ,))
             existing = cursor.fetchone()
