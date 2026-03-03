@@ -238,6 +238,7 @@ with open(data_path, "r" ,
                                WHERE phone = ? """ , (phone,))
                 customer_type = "Repeat Customer"
                 
+                
             else:
                 cursor.execute("""
                                INSERT INTO customers (phone,
