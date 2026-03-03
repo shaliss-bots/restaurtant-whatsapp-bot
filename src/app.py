@@ -210,10 +210,22 @@ with open(data_path, "r" ,
                 resp.message("Your cart is empty.")
                 return str(resp)
             
-            
-            
-            # TRACKING START HERE ====
+            # bulid confirmation message ==
             total = 0
+            text = "*Order Confirmed*\n\n"
+            
+            for i, row in enumerate(items, 1):
+                item_name = row[0]
+                price = row[1]
+                
+                text += f"{i}, {item_name.title()} -Rs.{price}\n"
+                total += price 
+                
+            text += f"\nTotal: Rs.{total}"
+            text += "\n\nRestaurant will contact you soon."  
+            
+            # tracking start here ====
+            
             today = datetime.now().strftime("%Y-%m-%d")
             
             cursor.execute("SELECT * FROM customers WHERE phone = ?", (phone ,))
@@ -223,42 +235,28 @@ with open(data_path, "r" ,
                 cursor.execute("""
                                UPDATE customers
                                SET total_orders = total_orders + 1
-                               WHERE phone = ? """ , (phone,))
-                customer_type = "Repeat Customer"
-                
+                               WHERE phone = ? 
+                               """ , (phone,))  
                 
             else:
                 cursor.execute("""
                                INSERT INTO customers (phone,
-                               name, first_order_date, total_orders) VALUES (?,?,? , 1)
+                               name, first_order_date, total_orders) 
+                               VALUES (?, ?, ? , 1)
                                """, (phone, "Guest", today)) 
-                customer_type = "New Customer" 
                 
             for row in items:
                 cursor.execute("""
-                               INSERT INTO orders (phone, item, price, date) VALUES (?,?,?,?)
+                               INSERT INTO orders (phone, item, price, date) 
+                               VALUES (?,?,?,?)
                                """, (phone, row[0], row[1], today)) 
             
-            conn.commit()  
+            conn.commit()
             
-            text = "*Order Confirmed*\n\n"
-            text += f"Customer Type: {customer_type}\n\n"
-        
-            
-            for i, row in enumerate(items, 1):
-                item_name = row[0]
-                price = row[1]
-                
-                text += f"{i}. {item_name.title()} -$ {price}\n"
-                total += price
-                
-            text += f"\nTotal: ${total}"
-            text += "\n\nRestaurant will contact you soon."
                  # tracking end here=====    
                 
             resp.message(text)
-            
-                
+          
                 # Clear cart after order 
             cursor.execute("DELETE FROM cart WHERE phone = ?", (phone,))
             conn.commit()
