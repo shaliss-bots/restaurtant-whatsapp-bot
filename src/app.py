@@ -53,7 +53,7 @@ with open(data_path, "r" ,
         return "Service is running"
 
     @app.route("/whatsapp", methods=["POST"])
-    def whatsapp_bot(): 
+    def whatsapp_bot():  
         msg = request.form.get("Body").strip().lower()
         resp = MessagingResponse()
         sender = request.form.get("From")
@@ -210,22 +210,10 @@ with open(data_path, "r" ,
                 resp.message("Your cart is empty.")
                 return str(resp)
             
-            total = 0
-            text = "*Order Confirmed*\n\n"
-            text += f"Customer Type: {customer_type}\n\n"
             
-            for i, row in enumerate(items, 1):
-                item_name = row[0]
-                price = row[1]
-                
-                text += f"{i}. {item_name.title()} -$ {price}\n"
-                total += price
-                
-            text += f"\nTotal: ${total}"
-            text += "\n\nRestaurant will contact you soon."
             
             # TRACKING START HERE ====
-            
+            total = 0
             today = datatime.now().strftime("%Y-%m-%d")
             
             cursor.execute("SELECT * FROM customers WHERE phone = ?", (phone ,))
@@ -251,9 +239,22 @@ with open(data_path, "r" ,
                                INSERT INTO orders (phone, item, price, date) VALUES (?,?,?,?)
                                """, (phone, row[0], row[1], today)) 
             
-            conn.commit()   
+            conn.commit()  
             
-            # tracking end here=====    
+            text = "*Order Confirmed*\n\n"
+            text += f"Customer Type: {customer_type}\n\n"
+        
+            
+            for i, row in enumerate(items, 1):
+                item_name = row[0]
+                price = row[1]
+                
+                text += f"{i}. {item_name.title()} -$ {price}\n"
+                total += price
+                
+            text += f"\nTotal: ${total}"
+            text += "\n\nRestaurant will contact you soon."
+                 # tracking end here=====    
                 
             resp.message(text)
             
@@ -291,12 +292,12 @@ with open(data_path, "r" ,
         
         #MONTHLY ORDERS 
         cursor.execute("""
-                       SELECT COUNT(*) FROM orders WHERE strftime('%m', 'now')""")
+                       SELECT COUNT(*) FROM orders WHERE strftime('%m', date) = strftime('%m','now')""")
         monthly_orders = cursor.fetchone()[0]
         
         # New customers this month 
         cursor.execute("""
-                       SELECT COUNT(*) FROM customers WHERE strftime('%m','now')""")
+                       SELECT COUNT(*) FROM customers WHERE strftime('%m',first_order_date) = strftime('%m'),'now')""")
         monthly_new = cursor.fetchone()[0]
         
         #Repeat Customers 
@@ -306,7 +307,7 @@ with open(data_path, "r" ,
         
         # Most Popular Dish 
         cursor.execute("""
-                       SELECT items, COUNT(*) as total FROM orders GROUP BY item ORDER BY total DESC LIMIT 1 """) 
+                       SELECT item, COUNT(*) as total FROM orders GROUP BY item ORDER BY total DESC LIMIT 1 """) 
         popular = cursor.fetchone()
         
         popular_item = popular[0] if popular else "NO orders yet"
@@ -328,7 +329,7 @@ with open(data_path, "r" ,
               
     
  
-           
+             
 if __name__ ==   "__main__":
     port = int(os.environ.get("PORT",5000))
     app.run(host="0.0.0.0",port=port)                  
