@@ -65,7 +65,7 @@ with open(data_path, "r" ,
                 "first_seen": today, "visits" : 1
                 
             }
-            with open("src/data.json", "w",
+            with open( data_path, "w",
                       encoding="utf-8") as f:
                 json.dump(data, f , indent=4)
                  
@@ -210,7 +210,7 @@ with open(data_path, "r" ,
                 resp.message("Your cart is empty.")
                 return str(resp)
             
-            # bulid confirmation message ==
+            # build confirmation message ==
             total = 0
             text = "*Order Confirmed*\n\n"
             
@@ -274,9 +274,12 @@ with open(data_path, "r" ,
             
             if any(word in msg for word in confused_words):
                 resp.message("Sorry Type *menu* to continue.")
-            return str(resp)   
-        
-    
+             
+            else:
+                resp.message("Type *menu* to see options.")
+                
+                return str(resp)
+                
     @app.route("/admin")
     def admin_dashbord():
         
@@ -285,7 +288,7 @@ with open(data_path, "r" ,
         total_customers = cursor.fetchone()[0]
         
         # total Orders 
-        cursor.excute("SELECT COUNT(*) FROM orders")
+        cursor.execute("SELECT COUNT(*) FROM orders")
         total_orders = cursor.fetchone()[0]
         
         #MONTHLY ORDERS 
@@ -308,7 +311,7 @@ with open(data_path, "r" ,
                        SELECT item, COUNT(*) as total FROM orders GROUP BY item ORDER BY total DESC LIMIT 1 """) 
         popular = cursor.fetchone()
         
-        popular_item = popular[0] if popular else "NO orders yet"
+        popular_item = popular[0] [0] if popular else "NO orders yet"
         
         
         return f"""
