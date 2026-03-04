@@ -293,7 +293,7 @@ with open(data_path, "r" ,
         
         #MONTHLY ORDERS 
         cursor.execute("""
-                       SELECT COUNT(*) FROM orders WHERE strftime('%m', date) = strftime('%m','now')""")
+                       SELECT COUNT(*) FROM customers WHERE strftime('%m', first_order_date) = strftime('%m','now')""")
         monthly_orders = cursor.fetchone()[0]
         
         # New customers this month 
@@ -311,7 +311,7 @@ with open(data_path, "r" ,
                        SELECT item, COUNT(*) as total FROM orders GROUP BY item ORDER BY total DESC LIMIT 1 """) 
         popular = cursor.fetchone()
         
-        popular_item = popular[0] [0] if popular else "NO orders yet"
+        popular_item = popular[0][0] if popular else "NO orders yet"
         
         
         return f"""
