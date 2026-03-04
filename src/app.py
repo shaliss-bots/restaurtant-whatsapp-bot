@@ -293,22 +293,26 @@ with open(data_path, "r" ,
         
         #MONTHLY ORDERS 
         cursor.execute("""
-                       SELECT COUNT(*) FROM customers WHERE strftime('%m', first_order_date) = strftime('%m','now')""")
+                       SELECT COUNT(*) FROM orders WHERE strftime('%m', date) = strftime('%m' , 'now' )
+                       """)
         monthly_orders = cursor.fetchone()[0]
         
         # New customers this month 
         cursor.execute("""
-                       SELECT COUNT(*) FROM customers WHERE strftime('%m',first_order_date) = strftime('%m'),'now')""")
+                       SELECT COUNT(*) FROM customers WHERE strftime('%m', first_order_date) = strftime('%m' , 'now' )
+                       """)
         monthly_new = cursor.fetchone()[0]
         
         #Repeat Customers 
         cursor.execute("""
-                       SELECT COUNT(*) FROM customers  WHERE total_orders > 1 """)   
+                       SELECT COUNT(*) FROM customers  WHERE total_orders > 1
+                       """)   
         repeat_customers = cursor.fetchone()[0]
         
         # Most Popular Dish 
         cursor.execute("""
-                       SELECT item, COUNT(*) as total FROM orders GROUP BY item ORDER BY total DESC LIMIT 1 """) 
+                       SELECT item, COUNT(*) as total FROM orders GROUP BY item ORDER BY total DESC LIMIT 1
+                       """) 
         popular = cursor.fetchone()
         
         popular_item = popular[0][0] if popular else "NO orders yet"
