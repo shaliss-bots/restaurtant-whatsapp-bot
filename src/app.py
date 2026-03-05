@@ -124,12 +124,12 @@ with open(data_path, "r" ,
             price = data["items"][msg]
             
             cursor.execute(
-                "INSERT INTO cart (phone , item, price ) VALUES (?, ?, ?)",
+                "INSERT INTO cart (phone , item, price) VALUES (?, ?, ?)",
                 (phone, msg, price)
             )
             conn.commit()
             
-            resp.message(f" {item.title()} added to cart.")
+            resp.message(f"{msg.title()} added to cart.")
             return str(resp)
         
          # show order
