@@ -56,7 +56,7 @@ with open(data_path, "r" ,
     def whatsapp_bot():  
         msg = request.values.get("Body","").strip().lower()
         resp = MessagingResponse()
-        sender = request.form.get("From")
+        sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
         today = datetime.now().strftime("%Y-%m-%d")
         
