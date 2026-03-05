@@ -78,8 +78,6 @@ with open(data_path, "r" ,
             )
              # LOGO IMAGE (ONLY FIRST TIME)
             welcome.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
-            
-        
         
         else: 
             data["Customers"][phone]["visits"] += 1
@@ -100,8 +98,7 @@ with open(data_path, "r" ,
             
             resp.message(text)
             return str(resp)
-        
-                
+              
             #CATEGORIES
         elif msg.startswith("2") or "category" in msg:
         
@@ -109,14 +106,15 @@ with open(data_path, "r" ,
             for cat in data["categories"]:
                 text += f"-{cat}\n"
             resp.message(text)
-            return str(resp)
-                    
-                    
+            return str(resp)  
         
-        elif msg in data["categories"]:
-            category = data["categories"][msg]
-            
-            text = f"*{msg.upper()} Menu*\n\n"
+        
+        elif any(cat in msg for cat in data["categories"]):            
+        
+           for cat in data["categories"]:
+            if cat in msg:
+                category = data["categories"][cat]
+            text = f"*{cat.upper()} Menu*\n\n"
             text += category["response"]
              
             resp.message(text)
@@ -124,18 +122,19 @@ with open(data_path, "r" ,
         
         
           #item add block
-        elif msg in data["items"]:
+        elif any(item in msg for item in data["items"]):
             
-            price = data["items"][msg]
-            cursor.execute(
+            for item in data["items"]:
+                if item in msg:
+            
+                     price = data["items"][item]
+                     cursor.execute(
                 "INSERT INTO cart (phone , item, price ) VALUES (?, ?, ?)",
                 (phone, msg, price)
             )
             conn.commit()
-            resp.message(f" {msg.title()} added to cart.")
+            resp.message(f" {item.title()} added to cart.")
             return str(resp)
-        
-        
         
          # show order
         elif msg == "show order":
@@ -176,14 +175,12 @@ with open(data_path, "r" ,
              loc = data["location"] 
              text = (f"{loc['address']}\n{loc['google_map']}")
              resp.message(text)
-             return str(resp)
-             
+             return str(resp)  
             
             # OFFERS
         elif msg == "5" or  msg == "offers":
             resp.message(f"*Today`s Offers*\n{data ['offers']}")
             return str(resp)
-        
     
             #CONTACT
         elif msg == "6" or msg == "contact":
@@ -236,7 +233,8 @@ with open(data_path, "r" ,
                                UPDATE customers
                                SET total_orders = total_orders + 1
                                WHERE phone = ? 
-                               """ , (phone,))  
+                               """ , (phone,)) 
+                conn.commit()   
                 
             else:
                 cursor.execute("""
@@ -281,7 +279,7 @@ with open(data_path, "r" ,
                 return str(resp)
                 
     @app.route("/admin")
-    def admin_dashbord():
+    def admin_dashboard():
         
         #TOTAL Customers 
         cursor.execute("SELECT COUNT(*) FROM customers")
@@ -293,13 +291,13 @@ with open(data_path, "r" ,
         
         #MONTHLY ORDERS 
         cursor.execute("""
-                       SELECT COUNT(*) FROM orders WHERE strftime('%m', date) = strftime('%m' , 'now' )
+                       SELECT COUNT(*) FROM orders WHERE strftime('%m', date) = strftime('%m','now')
                        """)
         monthly_orders = cursor.fetchone()[0]
         
         # New customers this month 
         cursor.execute("""
-                       SELECT COUNT(*) FROM customers WHERE strftime('%m', first_order_date) = strftime('%m' , 'now' )
+                       SELECT COUNT(*) FROM customers WHERE strftime('%m', first_order_date) = strftime('%m','now')
                        """)
         monthly_new = cursor.fetchone()[0]
         
