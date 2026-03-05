@@ -119,17 +119,16 @@ with open(data_path, "r" ,
         
         
           #item add block
-        elif any(item in msg for item in data["items"]):
+        elif msg in data["items"]:
             
-            for item in data["items"]:
-                if item in msg:
+            price = data["items"][msg]
             
-                     price = data["items"][item]
-                     cursor.execute(
+            cursor.execute(
                 "INSERT INTO cart (phone , item, price ) VALUES (?, ?, ?)",
                 (phone, msg, price)
             )
             conn.commit()
+            
             resp.message(f" {item.title()} added to cart.")
             return str(resp)
         
@@ -321,7 +320,6 @@ with open(data_path, "r" ,
          <p>Total Customers: {total_customers} </p>
          <p>Total Orders: {total_orders}</p>
          <p>Monthly Orders: {monthly_orders}</p>
-         
          <p>New Customers This Month:
          {monthly_new}</p>
          <p>Repeat Customers:
