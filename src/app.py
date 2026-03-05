@@ -65,11 +65,6 @@ with open(data_path, "r" ,
                 "first_seen": today, "visits" : 1
                 
             }
-            with open( data_path, "w",
-                      encoding="utf-8") as f:
-                json.dump(data, f , indent=4)
-                 
-            
              # WELCOME TEXT
             welcome = resp.message(
             "Hi, I am *Shaliss Bot*\n\n"
@@ -81,7 +76,9 @@ with open(data_path, "r" ,
         
         else: 
             data["Customers"][phone]["visits"] += 1
-
+        with open( data_path, "w",
+                     encoding="utf-8") as f:
+               json.dump(data, f , indent=4)
          
          #Menu
         if msg == "1" or msg == "menu":
@@ -179,7 +176,7 @@ with open(data_path, "r" ,
             
             # OFFERS
         elif msg == "5" or  msg == "offers":
-            resp.message(f"*Today`s Offers*\n{data ['offers']}")
+            resp.message(f"*Today`s Offers*\n{data['offers']}")
             return str(resp)
     
             #CONTACT
@@ -219,7 +216,9 @@ with open(data_path, "r" ,
                 total += price 
                 
             text += f"\nTotal: Rs.{total}"
-            text += "\n\nRestaurant will contact you soon."  
+            text += "\n\nRestaurant will contact you soon." 
+            resp.message(text)
+            return str(resp)
             
             # tracking start here ====
             
@@ -252,13 +251,12 @@ with open(data_path, "r" ,
             conn.commit()
             
                  # tracking end here=====    
-                
-            resp.message(text)
           
                 # Clear cart after order 
             cursor.execute("DELETE FROM cart WHERE phone = ?", (phone,))
             conn.commit()
-                
+            
+            resp.message(text)    
             return str(resp)
          
         #bye 
@@ -273,6 +271,7 @@ with open(data_path, "r" ,
             
             if any(word in msg for word in confused_words):
                 resp.message("Sorry Type *menu* to continue.")
+                return str(resp)
              
             else:
                 resp.message("Type *menu* to see options.")
@@ -314,7 +313,7 @@ with open(data_path, "r" ,
                        """) 
         popular = cursor.fetchone()
         
-        popular_item = popular[0][0] if popular else "NO orders yet"
+        popular_item = popular[0] if popular else "NO orders yet"
         
         
         return f"""
