@@ -263,7 +263,8 @@ with open(data_path, "r" ,
          
         #bye 
         elif msg in data["bye"]["keywords"]:
-            resp.message(data["bye"]["response"])  
+            resp.message(data["bye"]["response"])
+            return str(resp)  
             
         
          # ANY ITEM NAME 
