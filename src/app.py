@@ -105,18 +105,14 @@ with open(data_path, "r" ,
             resp.message(text)
             return str(resp)  
         
-        
-        elif any(cat in msg for cat in data["categories"]):            
-        
-           for cat in data["categories"]:
-            if cat in msg:
-                category = data["categories"][cat]
-                text = f"*{cat.upper()} Menu*\n\n"
-                text += category["response"]
+        elif msg in data["categories"]:    
+            
+            category = data["categories"][msg]    
+            text = f"*{msg.upper()} Menu*\n\n"
+            text += category["response"]
              
             resp.message(text)
             return str(resp)
-        
         
           #item add block
         elif msg in data["items"]:

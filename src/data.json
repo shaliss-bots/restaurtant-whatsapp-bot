@@ -11,29 +11,29 @@
     "categories":{
     "veg":{
         "keywords":["vegs," , "vegetarian"],
-        "response": "veg menu\nPaneer butter Masala-rs.220\nVeg Biryani-rs.148\nMix veg-rs.159\n Dal tadka-rs.150\nButter Roti-rs.23"
+        "response": "veg menu\npaneer butter masala-rs.220\nveg biryani-rs.148\nmix veg-rs.159\n dal tadka-rs.150\nbutter roti-rs.23"
          
     },
      
     "non_veg":{
         "keywords":["non veg", "chicken","mutton"],
-        "response":"Non-veg menu\nChiken Biryani-rs.250\nButter Chiken-rs.280\nChicken Curry-rs.230\nMutton Curry-rs.320"
+        "response":"Non-veg menu\nchiken biryani-rs.250\nbutter chiken-rs.280\nchicken curry-rs.230\nmutton curry-rs.320"
         
  },
     "snacks":{
         "keywords":["snacks","starter", "fast food"],
-        "response":"Snacks\nSamosa-rs.25\nFrench fries-rs.40\nVeg Roll-rs.50\nChicken Roll-rs.80\nSpring Roll-rs.90"  
+        "response":"Snacks\nsamosa-rs.25\nfrench fries-rs.40\nveg roll-rs.50\nchicken roll-rs.80\nspring roll-rs.90"  
     },
 
     "drinks":{
         "keywords":["drinks","drinks","beverage"],
-        "response":"Drinks\nCold Drink-rs.45\nFresh Lime-rs.35\nTea-rs.30\nCoffee-rs.60\nMilkshake-rs.50"
+        "response":"Drinks\ncold drink-rs.45\nfresh lime-rs.35\ntea-rs.30\ncoffee-rs.60\nmilkshake-rs.50"
     
     },
 
     "desserts":{
         "keywords":["sweet", "dessert", "ice cream"],
-        "response":"Desserts\nGulab jamun-rs.60\nice cream-rs.50\nBrownie-rs.95\nRasgulla-rs.70"
+        "response":"Desserts\ngulab jamun-rs.60\nice cream-rs.50\nbrownie-rs.95\nrasgulla-rs.70"
         
     }
     },
