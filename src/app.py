@@ -114,8 +114,8 @@ with open(data_path, "r" ,
            for cat in data["categories"]:
             if cat in msg:
                 category = data["categories"][cat]
-            text = f"*{cat.upper()} Menu*\n\n"
-            text += category["response"]
+                text = f"*{cat.upper()} Menu*\n\n"
+                text += category["response"]
              
             resp.message(text)
             return str(resp)
