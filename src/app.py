@@ -228,6 +228,7 @@ with open(data_path, "r" ,
                                SET total_orders = total_orders + 1
                                WHERE phone = ? 
                                """ , (phone,)) 
+                
                 conn.commit()   
                 
             else:
