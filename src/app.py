@@ -212,8 +212,7 @@ with open(data_path, "r" ,
                 
             text += f"\nTotal: Rs.{total}"
             text += "\n\nRestaurant will contact you soon." 
-            resp.message(text)
-            return str(resp)
+            
             
             # tracking start here ====
             
