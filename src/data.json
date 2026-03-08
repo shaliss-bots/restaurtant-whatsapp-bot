@@ -1,7 +1,7 @@
 {
     "greetings":{
-        "keywords": ["hi","hello","hey","hii"],
-        "response": "Hello welcome to our restaurant"
+        "keywords": ["hi","hello","hey","hii"]
+        
     },
     "menu":{
         "keywords":["menu", "food", "items","price"],

@@ -66,11 +66,14 @@ with open(data_path, "r" ,
                 
             }
              # WELCOME TEXT
-            welcome = resp.message(
+            welcome_text = resp.message(
             "Hi, I am *Shaliss Bot*\n\n"
             "Welcome to *Royal Biryani Restaurant*\n\n"
             "Type *menu* to continue."
             )
+            
+            welcome = resp.message(welcome_text)
+            
              # LOGO IMAGE (ONLY FIRST TIME)
             welcome.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
         
@@ -82,7 +85,7 @@ with open(data_path, "r" ,
                
         # greetings 
         if msg in data["greetings"]["keywords"]:
-            resp.message(data["greetings"]["response"])
+            resp.message(welcome_text)
             return str(resp)       
      
          
