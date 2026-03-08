@@ -60,8 +60,11 @@ with open(data_path, "r" ,
         phone = sender.replace("whatsapp:", "")
         today = datetime.now().strftime("%Y-%m-%d")
         
-        if phone not in data["Customers"]:
-            data["Customers"][phone] = {
+        #greetings
+        if any(word in msg for word in data["greetings"]["keywords"]):
+        
+            if  phone not in data["Customers"]:
+                data["Customers"][phone] = {
                 "first_seen": today, "visits" : 1
                 
             }
@@ -79,7 +82,9 @@ with open(data_path, "r" ,
             data["Customers"][phone]["visits"] += 1
         with open( data_path, "w",
                      encoding="utf-8") as f:
-               json.dump(data, f , indent=4)
+               json.dump(data, f , indent=4) 
+               
+               return str(resp)  
                  
          
          #Menu
@@ -267,8 +272,8 @@ with open(data_path, "r" ,
             confused_words = ["?" , "help", "kya", "kaise"]
             
             if any(word in msg for word in confused_words):
-                resp.message("Sorry Type *menu* to continue.")
-                return str(resp)
+              resp.message("Sorry Type *menu* to continue.")
+            return str(resp)
              
 
                 
