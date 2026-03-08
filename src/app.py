@@ -79,9 +79,15 @@ with open(data_path, "r" ,
         with open( data_path, "w",
                      encoding="utf-8") as f:
                json.dump(data, f , indent=4)
+               
+        # greeting 
+        if msg in data["greeting"]["keywords"]:
+            resp.message(data["greeting"]["response"])
+            return str(resp)       
+     
          
          #Menu
-        if msg == "1" or msg == "menu":
+        elif msg == "1" or msg == "menu":
             text = ("*Main Menu*\n\n"
                     "1 or menu\n"
                     "2 or category\n"
