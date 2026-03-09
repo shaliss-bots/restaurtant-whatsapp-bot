@@ -10,7 +10,7 @@
 
     "categories":{
     "veg":{
-        "keywords":["vegs," , "vegetarian"],
+        "keywords":["vegs" , "vegetarian"],
         "response": "veg menu\npaneer butter masala-rs.220\nveg biryani-rs.148\nmix veg-rs.159\n dal tadka-rs.150\nbutter roti-rs.23"
          
     },

@@ -83,8 +83,6 @@ with open(data_path, "r" ,
         with open( data_path, "w",
                      encoding="utf-8") as f:
                json.dump(data, f , indent=4) 
-               
-        return str(resp)         
          
          #Menu
         if msg == "1" or msg == "menu":
