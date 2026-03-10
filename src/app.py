@@ -101,7 +101,7 @@ with open(data_path, "r" ,
             return str(resp)
               
             #CATEGORIES
-        elif msg.startswith("2") or "category" in msg:
+        elif msg.startswith("2") or  msg == "category": 
         
             text = "*Categories*\n"
             for cat in data["categories"]:
@@ -325,8 +325,6 @@ with open(data_path, "r" ,
           
           """ 
               
-    
- 
              
 if __name__ ==   "__main__":
     port = int(os.environ.get("PORT",5000))
