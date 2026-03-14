@@ -5,6 +5,43 @@ import json
 from datetime import datetime
 import os
 import sqlite3
+import random 
+
+order_counter = 1000
+selected_item = {}
+addons = {
+    "paneer butter masala":[
+        "butter roti",
+        "mix veg",
+        "dal tadka",
+        "cold drink"
+        
+    ],
+    
+    "veg biryani":[
+        "cold drink",
+        "mutton curry",
+        "chicken curry"
+    ],
+    
+    "coffee":[
+        "brownie",
+        "ice cream"
+    ],
+    
+    "samosa":[
+        "cold drink",
+        "tea",
+        "coffee"
+    ],
+     
+     "mix veg":[
+         "butter roti",
+         "dal tadka",
+         "fresh lime"
+     ]
+
+}
 app = Flask(__name__)
 
 conn = sqlite3.connect("database.db",check_same_thread=False)
@@ -119,17 +156,41 @@ with open(data_path, "r" ,
             return str(resp)
         
           #item add block
+          
         elif msg in data["items"]:
-            
-            price = data["items"][msg]
-            
-            cursor.execute(
-                "INSERT INTO cart (phone , item, price) VALUES (?, ?, ?)",
-                (phone, msg, price)
-            )
+
+            selected_item[phone] = msg
+
+            text = f"{msg.title()} selected 🍽️\n\n"
+            text += "Recommended for 2 people:\n"
+            text += "2 plates\n\n"
+            text += "How many plates would you like?\n\n"
+            text += "1️⃣ 1 plate\n"
+            text += "2️⃣ 2 plates\n"
+            text += "3️⃣ 3 plates\n"
+            text += "4️⃣ Custom"
+
+            resp.message(text)
+            return str(resp)  
+          
+        elif msg.isdigit() and phone in selected_item:
+
+            qty = int(msg)
+            item = selected_item[phone]
+
+            price = data["items"][item]
+
+            for i in range(qty):
+               cursor.execute(
+            "INSERT INTO cart (phone , item, price) VALUES (?, ?, ?)",
+            (phone, item, price)
+          )
+
             conn.commit()
-            
-            resp.message(f"{msg.title()} added to cart.")
+
+            del selected_item[phone]
+
+            resp.message(f"{item.title()} x{qty} added to cart.")
             return str(resp)
         
          # show order
@@ -205,7 +266,12 @@ with open(data_path, "r" ,
             
             # build confirmation message ==
             total = 0
-            text = "*Order Confirmed*\n\n"
+            
+            global order_counter
+            order_counter += 1
+            order_id = order_counter
+            
+            text = "*Order Confirmed*\n\nOrder ID: {order_id}\n\n"
             
             for i, row in enumerate(items, 1):
                 item_name = row[0]
