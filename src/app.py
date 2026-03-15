@@ -8,7 +8,7 @@ import sqlite3
 import random 
 
 order_counter = 1000
-selected_item = None
+selected_item = {}
 addons = {
     "paneer butter masala":[
         "butter roti",
