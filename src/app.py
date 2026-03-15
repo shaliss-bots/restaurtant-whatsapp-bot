@@ -8,7 +8,7 @@ import sqlite3
 import random 
 
 order_counter = 1000
-selected_item = {}
+selected_item = None
 addons = {
     "paneer butter masala":[
         "butter roti",
@@ -184,15 +184,19 @@ with open(data_path, "r" ,
                cursor.execute(
             "INSERT INTO cart (phone , item, price) VALUES (?, ?, ?)",
             (phone, item, price)
-          )
-
+            )
             conn.commit()
 
-            del selected_item[phone]
+            del selected_item[phone] 
+            
+            text = f"{item.title()} x{qty} added to cart\n\n"
+            text += "You can order more items\n"
+            text += "Type *menu* to continue ordering\n"
+            text += "Type *order* to checkout"
 
-            resp.message(f"{item.title()} x{qty} added to cart.")
+            resp.message(text)
             return str(resp)
-        
+            
          # show order
         elif msg == "show order":
             
@@ -271,7 +275,7 @@ with open(data_path, "r" ,
             order_counter += 1
             order_id = order_counter
             
-            text = "*Order Confirmed*\n\nOrder ID: {order_id}\n\n"
+            text = f"*Order Confirmed*\n\nOrder ID: {order_id}\n\n"
             
             for i, row in enumerate(items, 1):
                 item_name = row[0]
