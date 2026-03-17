@@ -98,22 +98,24 @@ with open(data_path, "r" ,
         today = datetime.now().strftime("%Y-%m-%d")
         
         #greetings
-        if any(word in msg for word in data["greetings"]["keywords"]):
-        
-            if  phone not in data["Customers"]:
-                data["Customers"][phone] = {
-                "first_seen": today, "visits" : 1
+        if any(word in msg for word in 
+        data["greetings"]["keywords"]) and phone not in data["Customers"]:
+                
+             data["Customers"][phone] = {
+            "first_seen": today, "visits" : 1
                 
             }
-             # WELCOME TEXT
-            welcome = resp.message(
+              # WELCOME TEXT
+             welcome = resp.message(
             "Hi, I am *Shaliss Bot*\n\n"
             "Welcome to *Royal Biryani Restaurant*\n\n"
             "Type *menu* to continue."
             )
             
              # LOGO IMAGE (ONLY FIRST TIME)
-            welcome.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
+             welcome.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
+             
+             return str(resp)
         
         else: 
             data["Customers"][phone]["visits"] += 1
