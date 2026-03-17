@@ -178,7 +178,7 @@ with open(data_path, "r" ,
         elif msg.isdigit() and phone in selected_item:
 
             qty = int(msg)
-            item = selected_item[phone]
+            item = selected_item.get(phone)
 
             price = data["items"][item]
 
@@ -189,12 +189,12 @@ with open(data_path, "r" ,
             )
             conn.commit()
 
-            del selected_item[phone] 
+            selected_item.pop(phone, None)
             
             text = f"{item.title()} x{qty} added to cart\n\n"
             text += "You can order more items\n"
             text += "Type *menu* to continue ordering\n"
-            text += "Type *order* to checkout"
+            text += "Type *order OR 7* to checkout"
 
             resp.message(text)
             return str(resp)
