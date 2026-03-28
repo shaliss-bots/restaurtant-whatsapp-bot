@@ -9,6 +9,7 @@ import random
 
 order_counter = 1000
 selected_item = {}
+user_state = {}
 addons = {
     "paneer butter masala":[
         "butter roti",
@@ -148,9 +149,9 @@ with open(data_path, "r" ,
             resp.message(text)
             return str(resp)  
         
-        elif msg in data["categories"]:    
+        elif msg.lower() in data["categories"]:    
             
-            category = data["categories"][msg]    
+            category = data["categories"][msg.lower()]    
             text = f"*{msg.upper()} Menu*\n\n"
             text += category["response"]
              
@@ -159,23 +160,32 @@ with open(data_path, "r" ,
         
           #item add block
           
-        elif msg in data["items"]:
+        elif any(item in msg.lower() for item in data["items"]):
+            
+            for item in data["items"]:
+                if item in msg.lower():
+                    selected_item[phone] = item
+                    user_state[phone] = "waiting_quantity"
+                    break
 
-            selected_item[phone] = msg
-
-            text = f"{msg.title()} selected 🍽️\n\n"
-            text += "Recommended for 2 people:\n"
+            text = f"{item.title()} selected 🍽️\n\n"
+            if item in addons:
+                text += "\n\nYou may also like:\n"
+                for add in addons[item]:
+                    text += f"- {add}\n"
+            
+            text += "\nRecommended for 2 people:\n"
             text += "2 plates\n\n"
             text += "How many plates would you like?\n\n"
-            text += "1️⃣ 1 plate\n"
-            text += "2️⃣ 2 plates\n"
-            text += "3️⃣ 3 plates\n"
-            text += "4️⃣ Custom"
+            text += " 1️⃣ 1 plate\n"
+            text += " 2️⃣ 2 plates\n"
+            text += " 3️⃣ 3 plates\n"
+            text += " 4️⃣ Custom"
 
             resp.message(text)
             return str(resp)  
           
-        elif msg.isdigit() and phone in selected_item:
+        elif msg.isdigit() and user_state.get(phone) == "waiting_quantity":
 
             qty = int(msg)
             item = selected_item.get(phone)
@@ -186,10 +196,11 @@ with open(data_path, "r" ,
                cursor.execute(
             "INSERT INTO cart (phone , item, price) VALUES (?, ?, ?)",
             (phone, item, price)
-            )
+             )
             conn.commit()
 
             selected_item.pop(phone, None)
+            user_state.pop(phone, None)
             
             text = f"{item.title()} x{qty} added to cart\n\n"
             text += "You can order more items\n"
@@ -200,7 +211,7 @@ with open(data_path, "r" ,
             return str(resp)
             
          # show order
-        elif msg == "show order":
+        elif msg.lower() in ["show order" , "cart"]:
             
             cursor.execute(
                 "SELECT item, price FROM cart WHERE phone = ?",
@@ -277,19 +288,24 @@ with open(data_path, "r" ,
             order_counter += 1
             order_id = order_counter
             
+            cart_summary = {}
+
+            for item_name, price in items:
+                if item_name in cart_summary:
+                   cart_summary[item_name]["qty"] += 1
+                   cart_summary[item_name]["total"] += price
+            else:
+                cart_summary[item_name] = {"qty": 1, "total": price}
+
             text = f"*Order Confirmed*\n\nOrder ID: {order_id}\n\n"
-            
-            for i, row in enumerate(items, 1):
-                item_name = row[0]
-                price = row[1]
-                
-                text += f"{i}, {item_name.title()} -Rs.{price}\n"
-                total += price 
-                
+
+            for i, (item, details) in enumerate(cart_summary.items(), 1):
+             text += f"{i}. {item.title()} x{details['qty']} - Rs.{details['total']}\n"
+
+            total = sum(d["total"] for d in cart_summary.values())
             text += f"\nTotal: Rs.{total}"
-            text += "\n\nRestaurant will contact you soon." 
-            
-            
+            text += "\n\nRestaurant will contact you soon."
+    
             # tracking start here ====
             
             today = datetime.now().strftime("%Y-%m-%d")
@@ -324,7 +340,7 @@ with open(data_path, "r" ,
                  # tracking end here=====    
           
                 # Clear cart after order 
-            cursor.execute("DELETE FROM cart WHERE phone = ?", (phone,))
+            cursor.execute("DELETE FROM cart WHERE phone = ?", (phone))
             conn.commit()
             
             resp.message(text)    
