@@ -340,7 +340,7 @@ with open(data_path, "r" ,
                  # tracking end here=====    
           
                 # Clear cart after order 
-            cursor.execute("DELETE FROM cart WHERE phone = ?", (phone))
+            cursor.execute("DELETE FROM cart WHERE phone = ?", (phone,))
             conn.commit()
             
             resp.message(text)    
