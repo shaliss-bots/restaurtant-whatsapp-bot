@@ -122,9 +122,9 @@ with open(data_path, "r" ,
                 cart[phone][item] += qty
             else:
                 cart[phone][item] = qty        
-                00
+                
             selected_item.pop(phone,None)
-            user_state.pop(phone,None) 
+            user_state[phone] = None
             
             resp.message(f"{item.title()}x{cart[phone][item]}added to cart\nType menu or order")
             return str(resp)
