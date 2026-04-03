@@ -8,6 +8,7 @@ import sqlite3
 import random 
 
 order_counter = 1000
+cart = {}
 selected_item = {}
 user_state = {}
 addons = {
@@ -97,6 +98,37 @@ with open(data_path, "r" ,
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
         today = datetime.now().strftime("%Y-%m-%d")
+        all_items = list(data["items"].keys())
+        
+        # quantity
+        if user_state.get(phone) == "waiting_quantity":
+            msg_clean = msg.replace("plates","").replace("plate","").strip()
+            
+            
+            if not msg_clean.isdigit():
+                resp.message("Enter number only(1,2,3...)")
+                return str(resp)
+            
+            qty = int(msg_clean)
+            item = selected_item.get(phone)
+            if not item:
+                resp.message("Please select item again")
+                return str(resp)
+            
+            if phone not in cart:
+                cart[phone] = {}
+                
+            if item in cart[phone]:
+                cart[phone][item] += qty
+            else:
+                cart[phone][item] = qty        
+                00
+            selected_item.pop(phone,None)
+            user_state.pop(phone,None) 
+            
+            resp.message(f"{item.title()}x{cart[phone][item]}added to cart\nType menu or order")
+            return str(resp)
+        
         
         #greetings
         if any(word in msg for word in 
@@ -158,82 +190,48 @@ with open(data_path, "r" ,
             resp.message(text)
             return str(resp)
         
-          #item add block
-          
-        elif any(item in msg.lower() for item in data["items"]):
+        # item add block
+        elif msg in all_items:
+            selected_item[phone] = msg
+            user_state[phone] = "waiting_quantity"
             
-            for item in data["items"]:
-                if item in msg.lower():
-                    selected_item[phone] = item
-                    user_state[phone] = "waiting_quantity"
-                    break
-
-            text = f"{item.title()} selected 🍽️\n\n"
-            if item in addons:
-                text += "\n\nYou may also like:\n"
-                for add in addons[item]:
-                    text += f"- {add}\n"
+            text = f"{msg.title()} selected\n\n"
             
-            text += "\nRecommended for 2 people:\n"
-            text += "2 plates\n\n"
-            text += "How many plates would you like?\n\n"
-            text += " 1️⃣ 1 plate\n"
-            text += " 2️⃣ 2 plates\n"
-            text += " 3️⃣ 3 plates\n"
-            text += " 4️⃣ Custom"
-
-            resp.message(text)
-            return str(resp)  
-          
-        elif msg.isdigit() and user_state.get(phone) == "waiting_quantity":
-
-            qty = int(msg)
-            item = selected_item.get(phone)
-
-            price = data["items"][item]
-
-            for i in range(qty):
-               cursor.execute(
-            "INSERT INTO cart (phone , item, price) VALUES (?, ?, ?)",
-            (phone, item, price)
-             )
-            conn.commit()
-
-            selected_item.pop(phone, None)
-            user_state.pop(phone, None)
-            
-            text = f"{item.title()} x{qty} added to cart\n\n"
-            text += "You can order more items\n"
-            text += "Type *menu* to continue ordering\n"
-            text += "Type *order OR 7* to checkout"
-
+            #addons 
+            if msg in addons:
+                text += "You may also like:\n"
+                for add in addons[msg]:
+                    text += f".{add}\n"
+                    
+            text += "\nRecommended for 2 people:\n2 plates\n\n"        
+            text += "How many plates would you like?\n"
+            text += "1 /2 /3 / Custom"
             resp.message(text)
             return str(resp)
             
          # show order
         elif msg.lower() in ["show order" , "cart"]:
             
-            cursor.execute(
-                "SELECT item, price FROM cart WHERE phone = ?",
-                (phone,)
-            )
-            items = cursor.fetchall()
+            user_cart = cart.get(phone, {})
             
-            if not items:
+            if not user_cart:
                 resp.message("Your cart is empty.")
                 return str(resp)
             
             text = " *Your Current Order*\n\n"
             total = 0
             
-            for i, row in enumerate(items, 1):
-                item_name = row[0]
-                price = row[1]
+            for i, (item, qty) in enumerate(user_cart.items(), 1):
                 
-                text += f"{i}. {item_name.title()} - $ {price}\n"
+                price = data["items"][item]
+                item_total = price * qty
+                total += item_total
+                
+                text += f"{i}. {item.title()}x{qty} - Rs.{item_total}\n"
                 total += price
                 
-            text += f"\n Total: ${total}"
+            text += f"\n Total: Rs.{total}"
+            text += "\n\nType *order or 7* to confirm"
                 
             resp.message(text)
             return str(resp)  
@@ -269,98 +267,75 @@ with open(data_path, "r" ,
              
              
         #ORDER
-        elif msg == "7" or msg == "order":
-            
-            cursor.execute(
-                "SELECT item, price FROM cart WHERE phone = ?",
-                (phone,)
-            )
-            items = cursor.fetchall()
-            
-            if not items:
-                resp.message("Your cart is empty.")
-                return str(resp)
-            
-            # build confirmation message ==
-            total = 0
-            
+        elif msg.lower() in ["order", "7"]:
+
+            user_cart = cart.get(phone, {})
+
+            if not user_cart:
+              resp.message("Your cart is empty ❌")
+              return str(resp)
+
             global order_counter
             order_counter += 1
             order_id = order_counter
-            
-            cart_summary = {}
 
-            for item_name, price in items:
-                if item_name in cart_summary:
-                   cart_summary[item_name]["qty"] += 1
-                   cart_summary[item_name]["total"] += price
-            else:
-                cart_summary[item_name] = {"qty": 1, "total": price}
+            text = f"*Order Confirmed* 🎉\n\nOrder ID: {order_id}\n\n"
 
-            text = f"*Order Confirmed*\n\nOrder ID: {order_id}\n\n"
+            total = 0
+            today = datetime.now().strftime("%Y-%m-%d")
 
-            for i, (item, details) in enumerate(cart_summary.items(), 1):
-             text += f"{i}. {item.title()} x{details['qty']} - Rs.{details['total']}\n"
+            for i, (item, qty) in enumerate(user_cart.items(), 1):
 
-            total = sum(d["total"] for d in cart_summary.values())
+             price = data["items"][item]
+             item_total = price * qty
+             total += item_total
+
+             text += f"{i}. {item.title()} x{qty} - Rs.{item_total}\n"
+   
+           # ✅ SAVE ORDER (with qty)
+            cursor.execute(
+            "INSERT INTO orders (phone, item, qty, price, date) VALUES (?, ?, ?, ?, ?)",
+            (phone, item, qty, price, today)
+            )
+
+            conn.commit()
+
             text += f"\nTotal: Rs.{total}"
             text += "\n\nRestaurant will contact you soon."
-    
-            # tracking start here ====
-            
-            today = datetime.now().strftime("%Y-%m-%d")
-            
-            cursor.execute("SELECT * FROM customers WHERE phone = ?", (phone ,))
+
+            # ✅ CUSTOMER TRACKING (ये तुम्हारा existing सही है 👍)
+            cursor.execute("SELECT * FROM customers WHERE phone = ?", (phone,))
             existing = cursor.fetchone()
-            
+
             if existing:
-                cursor.execute("""
-                               UPDATE customers
-                               SET total_orders = total_orders + 1
-                               WHERE phone = ? 
-                               """ , (phone,)) 
-                
-                conn.commit()   
-                
+              cursor.execute("""
+               UPDATE customers
+               SET total_orders = total_orders + 1
+               WHERE phone = ?
+                """, (phone,))
+            
             else:
-                cursor.execute("""
-                               INSERT INTO customers (phone,
-                               name, first_order_date, total_orders) 
-                               VALUES (?, ?, ? , 1)
-                               """, (phone, "Guest", today)) 
-                
-            for row in items:
-                cursor.execute("""
-                               INSERT INTO orders (phone, item, price, date) 
-                               VALUES (?,?,?,?)
-                               """, (phone, row[0], row[1], today)) 
-            
+               cursor.execute("""
+                INSERT INTO customers (phone, name, first_order_date, total_orders)
+                 VALUES (?, ?, ?, 1)
+                 """, (phone, "Guest", today))
+
             conn.commit()
-            
-                 # tracking end here=====    
-          
-                # Clear cart after order 
-            cursor.execute("DELETE FROM cart WHERE phone = ?", (phone,))
-            conn.commit()
-            
-            resp.message(text)    
+
+             # ✅ CLEAR CART (Python वाला)
+            cart.pop(phone, None)
+
+            resp.message(text)
             return str(resp)
          
-        #bye 
-        elif msg in data["bye"]["keywords"]:
-            resp.message(data["bye"]["response"])
-            return str(resp)  
-            
-        
          # ANY ITEM NAME 
         else:  
-            confused_words = ["?" , "help", "kya", "kaise"]
+            confused_words = ["?" , "help", "kya", "kaise","what"]
             
             if any(word in msg for word in confused_words):
               resp.message("Sorry Type *menu* to continue.")
             return str(resp)
-             
-
+            
                 
     @app.route("/admin")
     def admin_dashboard():
