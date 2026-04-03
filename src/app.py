@@ -165,7 +165,7 @@ with open(data_path, "r" ,
                     "4 or  location\n"
                     "5 or  offers\n"
                     "6 or contact\n"
-                    "7 or order\n\n"
+                    "7 or show order\n\n"
                     "Type any option to continue."
                     )
             
@@ -207,35 +207,7 @@ with open(data_path, "r" ,
             text += "How many plates would you like?\n"
             text += "1 /2 /3 / Custom"
             resp.message(text)
-            return str(resp)
-            
-         # show order
-        elif msg.lower() in ["show order" , "cart"]:
-            
-            user_cart = cart.get(phone, {})
-            
-            if not user_cart:
-                resp.message("Your cart is empty.")
-                return str(resp)
-            
-            text = " *Your Current Order*\n\n"
-            total = 0
-            
-            for i, (item, qty) in enumerate(user_cart.items(), 1):
-                
-                price = data["items"][item]
-                item_total = price * qty
-                total += item_total
-                
-                text += f"{i}. {item.title()}x{qty} - Rs.{item_total}\n"
-                total += price
-                
-            text += f"\n Total: Rs.{total}"
-            text += "\n\nType *order or 7* to confirm"
-                
-            resp.message(text)
-            return str(resp)  
-        
+            return str(resp)       
         
             #TIMING
         elif msg == "3" or msg == "timing":
@@ -264,68 +236,75 @@ with open(data_path, "r" ,
             ) 
              resp.message(text)
              return str(resp)
-             
-             
-        #ORDER
-        elif msg.lower() in ["order", "7"]:
+         
+        
+          #show order   
+        elif msg.lower() in ["order", "show order", "cart" ,"7"]:
 
             user_cart = cart.get(phone, {})
 
             if not user_cart:
-              resp.message("Your cart is empty ❌")
-              return str(resp)
+             resp.message("🛒 Your cart is empty\n👉 Type *menu* to add items")
+            return str(resp)
 
-            global order_counter
-            order_counter += 1
-            order_id = order_counter
+            text = "🧾 *Your Order Summary*\n\n"
+            total = 0
 
-            text = f"*Order Confirmed* 🎉\n\nOrder ID: {order_id}\n\n"
+            for i, (item, qty) in enumerate(user_cart.items(), 1):
+               price = data["items"][item]
+               item_total = price * qty
+               total += item_total
+
+               text += f"{i}. 🍽️ {item.title()} x{qty} = ₹{item_total}\n"
+
+               text += f"\n💰 *Total: ₹{total}*"
+               text += "\n\n👉 Type *YES* to confirm your order ✅"
+
+               resp.message(text)
+               return str(resp)
+
+            
+            
+        elif msg.lower() == "yes":
+
+            user_cart = cart.get(phone, {})
+
+            if not user_cart:
+             resp.message("❌ No order found\n👉 Type *menu* to start")
+             return str(resp)
 
             total = 0
             today = datetime.now().strftime("%Y-%m-%d")
 
+            text = "🎉 *Order Confirmed!*\n\n"
+            text += "🧾 *Order Details:*\n\n"
+
             for i, (item, qty) in enumerate(user_cart.items(), 1):
 
-             price = data["items"][item]
-             item_total = price * qty
-             total += item_total
+              price = data["items"][item]
+              item_total = price * qty
+              total += item_total
 
-             text += f"{i}. {item.title()} x{qty} - Rs.{item_total}\n"
-   
-           # ✅ SAVE ORDER (with qty)
-            cursor.execute(
-            "INSERT INTO orders (phone, item, qty, price, date) VALUES (?, ?, ?, ?, ?)",
-            (phone, item, qty, price, today)
-            )
+              text += f"{i}. 🍽️ {item.title()} x{qty} = ₹{item_total}\n"
 
-            conn.commit()
-
-            text += f"\nTotal: Rs.{total}"
-            text += "\n\nRestaurant will contact you soon."
-
-            # ✅ CUSTOMER TRACKING (ये तुम्हारा existing सही है 👍)
-            cursor.execute("SELECT * FROM customers WHERE phone = ?", (phone,))
-            existing = cursor.fetchone()
-
-            if existing:
-              cursor.execute("""
-               UPDATE customers
-               SET total_orders = total_orders + 1
-               WHERE phone = ?
-                """, (phone,))
-            
-            else:
-               cursor.execute("""
-                INSERT INTO customers (phone, name, first_order_date, total_orders)
-                 VALUES (?, ?, ?, 1)
-                 """, (phone, "Guest", today))
+             # 💾 SAVE TO DATABASE
+              cursor.execute(
+            "INSERT INTO orders (phone, item, price, date) VALUES (?, ?, ?, ?)",
+            (phone, item, item_total, today)
+             )
 
             conn.commit()
 
-             # ✅ CLEAR CART (Python वाला)
-            cart.pop(phone, None)
+            text += f"\n💰 *Total Paid: ₹{total}*"
+            text += "\n\n⏳ Your order will be ready in 20-30 mins"
+            text += "\n📞 Restaurant will contact you soon"
+            text += "\n❤️ Thank you for ordering!"
 
             resp.message(text)
+
+            # 🧹 clear cart
+            cart.pop(phone, None)
+
             return str(resp)
          
          # ANY ITEM NAME 
