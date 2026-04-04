@@ -124,7 +124,7 @@ with open(data_path, "r" ,
                 cart[phone][item] = qty        
                 
             selected_item.pop(phone,None)
-            user_state[phone] = None
+            user_state.pop(phone,None)
             
             resp.message(f"{item.title()}x{cart[phone][item]}added to cart\nType menu or order")
             return str(resp)
@@ -239,7 +239,7 @@ with open(data_path, "r" ,
          
         
           #show order   
-        elif msg.lower() in ["order", "show order", "cart" ,"7"]:
+        elif msg.lower() in ["show order", "cart" ,"7"]:
 
             user_cart = cart.get(phone, {})
 
@@ -289,8 +289,8 @@ with open(data_path, "r" ,
 
              # 💾 SAVE TO DATABASE
               cursor.execute(
-            "INSERT INTO orders (phone, item, price, date) VALUES (?, ?, ?, ?)",
-            (phone, item, item_total, today)
+            "INSERT INTO orders (phone, item, qty, price, date) VALUES (?, ?, ?, ?, ?)",
+            (phone, item, qty, item_total, today)
              )
 
             conn.commit()
