@@ -84,7 +84,9 @@ data_path = os.path.join(BASE_DIR,"data.json")
 
 with open(data_path, "r" ,
         encoding="utf-8") as f:
-    data = json.load(f)
+    data = json.load(f) 
+    
+    data["items"] = {k.lower(): v for k, v in data["items"].items()}
     
     
     @app.route("/")
@@ -251,7 +253,7 @@ with open(data_path, "r" ,
             total = 0
 
             for i, (item, qty) in enumerate(user_cart.items(), 1):
-               price = data["items"][item]
+               price = data["items"].get(item.lower(), 0)
                item_total = price * qty
                total += item_total
 
@@ -281,7 +283,11 @@ with open(data_path, "r" ,
 
             for i, (item, qty) in enumerate(user_cart.items(), 1):
 
-              price = data["items"][item]
+              price = data["items"].get(item.lower(), 0)
+              
+              if price == 0:
+                  continue
+              
               item_total = price * qty
               total += item_total
 
@@ -290,7 +296,7 @@ with open(data_path, "r" ,
              # 💾 SAVE TO DATABASE
               cursor.execute(
             "INSERT INTO orders (phone, item, qty, price, date) VALUES (?, ?, ?, ?, ?)",
-            (phone, item, qty, item_total, today)
+            (phone, item, qty, price, today)
              )
 
             conn.commit()
