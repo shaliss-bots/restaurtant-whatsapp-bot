@@ -246,7 +246,7 @@ with open(data_path, "r" ,
 
             if not user_cart:
              resp.message("🛒 Your cart is empty\n👉 Type *menu* to add items")
-            return str(resp)
+             return str(resp)
 
             text = "🧾 *Your Order Summary*\n\n"
             total = 0
@@ -263,8 +263,6 @@ with open(data_path, "r" ,
 
                resp.message(text)
                return str(resp)
-
-            
             
         elif msg == "yes":
 
