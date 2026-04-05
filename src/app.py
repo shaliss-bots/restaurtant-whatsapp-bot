@@ -241,7 +241,7 @@ with open(data_path, "r" ,
          
         
           #show order   
-        elif msg.lower() in ["show order", "cart" ,"7"]:
+        elif msg.strip() == "7" or msg in ["show order" , "cart"] :
 
             user_cart = cart.get(phone, {})
 
