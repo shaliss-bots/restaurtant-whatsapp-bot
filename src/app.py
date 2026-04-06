@@ -86,7 +86,7 @@ with open(data_path, "r" ,
         encoding="utf-8") as f:
     data = json.load(f) 
     
-    data["items"] = {k.lower(): v for k, v in data["items"].items()}
+   # data["items"] = {k.lower(): v for k, v in data["items"].items()}
     
     
     @app.route("/")
