@@ -71,6 +71,7 @@ cursor.execute("""
                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                    phone TEXT,
                    item TEXT,
+                   qty INTEGER,
                    price INTEGER,
                    date TEXT
                  )  
