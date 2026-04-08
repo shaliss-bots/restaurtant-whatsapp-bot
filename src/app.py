@@ -136,12 +136,8 @@ with open(data_path, "r" ,
         
         #greetings
         if any(word in msg for word in 
-        data["greetings"]["keywords"]) and phone not in data["Customers"]:
-                
-             data["Customers"][phone] = {
-            "first_seen": today, "visits" : 1
-                
-            }
+        data["greetings"]["keywords"]) :
+            
               # WELCOME TEXT
              welcome = resp.message(
             "Hi, I am *Shaliss Bot*\n\n"
@@ -154,8 +150,6 @@ with open(data_path, "r" ,
              
              return str(resp)
         
-        else: 
-            data["Customers"][phone]["visits"] += 1
         with open( data_path, "w",
                      encoding="utf-8") as f:
                json.dump(data, f , indent=4) 
