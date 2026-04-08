@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import json
 from datetime import datetime
 import os
-import sqlite3
+import psycopg2
 import random 
 
 order_counter = 1000
@@ -46,11 +46,13 @@ addons = {
 }
 app = Flask(__name__)
 
-conn = sqlite3.connect("database.db",check_same_thread=False)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+conn = psycopg2.connect(DATABASE_URL)
 cursor = conn.cursor()
 
 cursor.execute("""
-               CREATE TABLE IF NOT EXISTS cart( id INTEGER PRIMARY KEY AUTOINCREMENT,
+               CREATE TABLE IF NOT EXISTS cart( id SERIAL PRIMARY KEY,
                phone TEXT,
                item TEXT,
                price INTEGER
@@ -68,7 +70,7 @@ cursor.execute("""
 
 cursor.execute("""
                CREATE TABLE IF NOT EXISTS orders (
-                   id INTEGER PRIMARY KEY AUTOINCREMENT,
+                   id SERIAL PRIMARY KEY,
                    phone TEXT,
                    item TEXT,
                    qty INTEGER,
@@ -293,7 +295,7 @@ with open(data_path, "r" ,
 
              # 💾 SAVE TO DATABASE
               cursor.execute(
-            "INSERT INTO orders (phone, item, qty, price, date) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO orders (phone, item, qty, price, date) VALUES (%s, %s, %s, %s, %s)",
             (phone, item, qty, price, today)
              )
 
@@ -333,13 +335,13 @@ with open(data_path, "r" ,
         
         #MONTHLY ORDERS 
         cursor.execute("""
-                       SELECT COUNT(*) FROM orders WHERE strftime('%m', date) = strftime('%m','now')
+                       SELECT COUNT(*) FROM orders WHERE EXTRACT(MONTH FROM date::date) = EXTRACT(MONTH FROM CURRENT_DATE)
                        """)
         monthly_orders = cursor.fetchone()[0]
         
         # New customers this month 
         cursor.execute("""
-                       SELECT COUNT(*) FROM customers WHERE strftime('%m', first_order_date) = strftime('%m','now')
+                       SELECT COUNT(*) FROM customers WHERE EXTRACT(MONTH FROM first_order_date::date) = EXTRACT(MONTH FROM CURRENT_DATE)
                        """)
         monthly_new = cursor.fetchone()[0]
         
