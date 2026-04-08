@@ -84,7 +84,6 @@ conn.commit()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(BASE_DIR,"data.json")
 
-
 with open(data_path, "r" ,
         encoding="utf-8") as f:
     data = json.load(f) 
@@ -240,8 +239,7 @@ with open(data_path, "r" ,
                 f"Whatsapp: {c['whatsapp']}"
             ) 
              resp.message(text)
-             return str(resp)
-         
+             return str(resp) 
         
           #show order   
         elif msg in ["7" ,"show order"] :
