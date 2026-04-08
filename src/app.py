@@ -111,13 +111,15 @@ with open(data_path, "r" ,
             
             if not msg_clean.isdigit():
                 resp.message("Enter number only(1,2,3...)")
-                return str(resp)
+                return Response(str(resp),
+                mimetype="application/xml")                 
             
             qty = int(msg_clean)
             item = selected_item.get(phone)
             if not item:
                 resp.message("Please select item again")
-                return str(resp)
+                return Response(str(resp),
+                mimetype="application/xml")  
             
             if phone not in cart:
                 cart[phone] = {}
@@ -131,7 +133,8 @@ with open(data_path, "r" ,
             user_state.pop(phone,None)
             
             resp.message(f"{item.title()}x{cart[phone][item]}added to cart\nType menu or order")
-            return str(resp)
+            return Response(str(resp),
+            mimetype="application/xml")  
         
         
         #greetings
@@ -148,7 +151,8 @@ with open(data_path, "r" ,
              # LOGO IMAGE (ONLY FIRST TIME)
              welcome.media("https://res.cloudinary.com/dd4bsgg46/image/upload/v1768571938/Untitled_design_2_t1kqlx.png")
              
-             return str(resp)
+             return  Response(str(resp),
+             mimetype="application/xml")  
         
         with open( data_path, "w",
                      encoding="utf-8") as f:
@@ -168,7 +172,8 @@ with open(data_path, "r" ,
                     )
             
             resp.message(text)
-            return str(resp)
+            return  Response(str(resp),
+            mimetype="application/xml")  
               
             #CATEGORIES
         elif msg.startswith("2") or  msg == "category": 
@@ -177,7 +182,8 @@ with open(data_path, "r" ,
             for cat in data["categories"]:
                 text += f"-{cat}\n"
             resp.message(text)
-            return str(resp)  
+            return Response(str(resp),
+            mimetype="application/xml")  
         
         elif msg.lower() in data["categories"]:    
             
@@ -186,7 +192,8 @@ with open(data_path, "r" ,
             text += category["response"]
              
             resp.message(text)
-            return str(resp)
+            return  Response(str(resp),
+            mimetype="application/xml")  
         
         # item add block
         elif msg in all_items:
@@ -205,24 +212,28 @@ with open(data_path, "r" ,
             text += "How many plates would you like?\n"
             text += "1 /2 /3 / Custom"
             resp.message(text)
-            return str(resp)       
+            return  Response(str(resp),
+            mimetype="application/xml")  
         
             #TIMING
         elif msg == "3" or msg == "timing":
              resp.message(data["timing"]["response"]) 
-             return str(resp)
+             return  Response(str(resp),
+             mimetype="application/xml")  
              
              #LOCATION
         elif msg == "4" or msg == "location":
              loc = data["location"] 
              text = (f"{loc['address']}\n{loc['google_map']}")
              resp.message(text)
-             return str(resp)  
+             return  Response(str(resp),
+             mimetype="application/xml")  
             
             # OFFERS
         elif msg == "5" or  msg == "offers":
             resp.message(f"*Today`s Offers*\n{data['offers']}")
-            return str(resp)
+            return  Response(str(resp),
+            mimetype="application/xml")  
     
             #CONTACT
         elif msg == "6" or msg == "contact":
@@ -233,7 +244,8 @@ with open(data_path, "r" ,
                 f"Whatsapp: {c['whatsapp']}"
             ) 
              resp.message(text)
-             return str(resp) 
+             return  Response(str(resp),
+             mimetype="application/xml")  
         
           #show order   
         elif msg in ["7" ,"show order"] :
@@ -241,7 +253,8 @@ with open(data_path, "r" ,
 
             if not user_cart:
              resp.message("🛒 Your cart is empty\n👉 Type *menu* to add items")
-             return str(resp)
+             return  Response(str(resp),
+             mimetype="application/xml")  
 
             text = "🧾 *Your Order Summary*\n\n"
             total = 0
@@ -257,7 +270,8 @@ with open(data_path, "r" ,
                text += "\n\n👉 Type *YES* to confirm your order ✅"
 
                resp.message(text)
-               return str(resp)
+               return  Response(str(resp),
+               mimetype="application/xml")  
             
         elif msg == "yes":
 
@@ -265,7 +279,8 @@ with open(data_path, "r" ,
 
             if not user_cart:
              resp.message("❌ No order found\n👉 Type *menu* to start")
-             return str(resp)
+             return  Response(str(resp),
+             mimetype="application/xml")  
 
             total = 0
             today = datetime.now().strftime("%Y-%m-%d")
@@ -303,7 +318,8 @@ with open(data_path, "r" ,
             # 🧹 clear cart
             cart.pop(phone, None)
 
-            return str(resp)
+            return  Response(str(resp),
+            mimetype="application/xml")  
          
          # ANY ITEM NAME 
         else:  
@@ -311,7 +327,8 @@ with open(data_path, "r" ,
             
             if any(word in msg for word in confused_words):
               resp.message("Sorry Type *menu* to continue.")
-            return str(resp)
+            return  Response(str(resp),
+            mimetype="application/xml")  
             
                 
     @app.route("/admin")
