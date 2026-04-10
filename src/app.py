@@ -99,6 +99,10 @@ with open(data_path, "r" ,
     def whatsapp_bot():  
         msg = request.values.get("Body","").strip().lower()
         resp = MessagingResponse()
+        
+        resp.message("WORKING 100%")
+        return Response(str(resp),mimetype="application/xml")
+        
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
         today = datetime.now().strftime("%Y-%m-%d")
