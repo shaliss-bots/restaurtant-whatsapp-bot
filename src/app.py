@@ -46,40 +46,40 @@ addons = {
 }
 app = Flask(__name__)
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+#DATABASE_URL = os.getenv("DATABASE_URL")
 
-conn = psycopg2.connect(DATABASE_URL)
-cursor = conn.cursor()
+#conn = psycopg2.connect(DATABASE_URL)
+#cursor = conn.cursor()
 
-cursor.execute("""
-               CREATE TABLE IF NOT EXISTS cart( id SERIAL PRIMARY KEY,
-               phone TEXT,
-               item TEXT,
-               price INTEGER
-              )     
-            """ )
+ #cursor.execute("""
+            #CREATE TABLE IF NOT EXISTS cart( id SERIAL PRIMARY KEY,
+              # phone TEXT,
+              # item TEXT,
+              # price INTEGER
+             # )     
+            #""" )
 
-cursor.execute("""
-               CREATE TABLE IF NOT EXISTS  customers (
-                   phone TEXT PRIMARY KEY,
-                   name TEXT,
-                   first_order_date TEXT,
-                   total_orders INTEGER
-                 )  
-           """ )
+#cursor.execute("""
+             # CREATE TABLE IF NOT EXISTS  customers (
+                 #  phone TEXT PRIMARY KEY,
+                  # name TEXT,
+                  # first_order_date TEXT,
+                  # total_orders INTEGER
+                # )  
+          # """ )
 
-cursor.execute("""
-               CREATE TABLE IF NOT EXISTS orders (
-                   id SERIAL PRIMARY KEY,
-                   phone TEXT,
-                   item TEXT,
-                   qty INTEGER,
-                   price INTEGER,
-                   date TEXT
-                 )  
-             """ )
+ #cursor.execute("""
+               #CREATE TABLE IF NOT EXISTS orders (
+                   #id SERIAL PRIMARY KEY,
+                 #  phone TEXT,
+                   #item TEXT,
+                  # qty INTEGER,
+                  # price INTEGER,
+                  # date TEXT
+               #  )  
+            # """ )
 
-conn.commit()
+#conn.commit()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(BASE_DIR,"data.json")
