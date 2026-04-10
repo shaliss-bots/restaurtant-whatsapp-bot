@@ -100,7 +100,7 @@ with open(data_path, "r" ,
         msg = request.values.get("Body","").strip().lower()
         resp = MessagingResponse()
         resp.message("WORKING 100%")
-        return str(resp)
+        return Response(str(resp),content_type="application/xml")
         
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
