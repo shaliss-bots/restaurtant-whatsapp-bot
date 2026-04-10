@@ -99,9 +99,8 @@ with open(data_path, "r" ,
     def whatsapp_bot():  
         msg = request.values.get("Body","").strip().lower()
         resp = MessagingResponse()
-        
         resp.message("WORKING 100%")
-        return Response(str(resp),mimetype="application/xml")
+        return str(resp)
         
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
@@ -115,15 +114,13 @@ with open(data_path, "r" ,
             
             if not msg_clean.isdigit():
                 resp.message("Enter number only(1,2,3...)")
-                return Response(str(resp),
-                mimetype="application/xml")                 
+                return Response(str(resp),mimetype="application/xml")                 
             
             qty = int(msg_clean)
             item = selected_item.get(phone)
             if not item:
                 resp.message("Please select item again")
-                return Response(str(resp),
-                mimetype="application/xml")  
+                return Response(str(resp),mimetype="application/xml")  
             
             if phone not in cart:
                 cart[phone] = {}
@@ -137,8 +134,7 @@ with open(data_path, "r" ,
             user_state.pop(phone,None)
             
             resp.message(f"{item.title()}x{cart[phone][item]}added to cart\nType menu or order")
-            return Response(str(resp),
-            mimetype="application/xml")  
+            return Response(str(resp),mimetype="application/xml")  
         
         
         #greetings
