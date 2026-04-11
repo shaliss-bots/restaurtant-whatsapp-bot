@@ -97,10 +97,8 @@ with open(data_path, "r" ,
 
     @app.route("/whatsapp", methods=["POST"])
     def whatsapp_bot():  
-        #msg = request.values.get("Body","").strip().lower()
         resp = MessagingResponse()
         resp.message("WORKING 100%")
-        
         return str(resp)
         
         sender = request.values.get("From")
