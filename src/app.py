@@ -99,7 +99,8 @@ with open(data_path, "r" ,
     def whatsapp_bot():  
         resp = MessagingResponse()
         resp.message("WORKING 100%")
-        return str(resp)
+        return Response(str(resp),mimetype="application/xml")
+                        
         
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
