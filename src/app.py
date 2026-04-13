@@ -97,9 +97,7 @@ with open(data_path, "r" ,
 
     @app.route("/whatsapp", methods=["POST"])
     def whatsapp_bot():  
-        resp = MessagingResponse()
-        resp.message("WORKING 100%")
-        return Response(str(resp),mimetype="application/xml")
+        return "HELLO TEST"
                         
         
         sender = request.values.get("From")
