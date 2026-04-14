@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request , Response
 from twilio.twiml.messaging_response import MessagingResponse
 from dotenv import load_dotenv
 import json
@@ -97,8 +97,9 @@ with open(data_path, "r" ,
 
     @app.route("/whatsapp", methods=["POST"])
     def whatsapp_bot():  
-        return "HELLO TEST"
-                        
+        resp = MessagingResponse()
+        reSP.message( "HELLO TEST")
+        return Response(str(resp),content_type="application/xml")
         
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
