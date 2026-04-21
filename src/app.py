@@ -10,45 +10,17 @@ import random
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-order_counter = 1000
-cart = {}
-selected_item = {}
-user_state = {}
-addons = {
-    "paneer butter masala":[
-        "butter roti",
-        "mix veg",
-        "dal tadka",
-        "cold drink"
-        
-    ],
-    
-    "veg biryani":[
-        "cold drink",
-        "mutton curry",
-        "chicken curry"
-    ],
-    
-    "coffee":[
-        "brownie",
-        "ice cream"
-    ],
-    
-    "samosa":[
-        "cold drink",
-        "tea",
-        "coffee"
-    ],
-     
-     "mix veg":[
-         "butter roti",
-         "dal tadka",
-         "fresh lime"
-     ]
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL  not set")
 
-}
+
 app = Flask(__name__)
 
+def get_db():
+    return psycopg2.connect(DATABASE_URL)
+
+conn = get_db()
+cursor = conn.cursor()
 
 cursor.execute("""
             CREATE TABLE IF NOT EXISTS cart( id SERIAL PRIMARY KEY,
@@ -86,44 +58,51 @@ data_path = os.path.join(BASE_DIR,"data.json")
 with open(data_path, "r" ,
         encoding="utf-8") as f:
     data = json.load(f) 
-    
-   # data["items"] = {k.lower(): v for k, v in data["items"].items()}
-    
-    
-    @app.route("/")
-    def home():
-        return "Service is running"
-    
-    @app.route("/test-db")
-    def test_db():
-        
-        conn = psycopg2.connect(
-           dbname="postgres",
-           user="postgres",
-           password="myshgur1320",
-           host="localhost",
-           port="5432"
-        )   
-        
-        
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-                CREATE TABLE IF NOT EXISTS cart (
-                    id SERIAL PRIMARY KEY,
-                    phone TEXT,
-                    item  TEXT,
-                    price INTEGER
-                  )       
-             """ ) 
-        conn.commit()
-        
-        cursor.execute("SELECT 1;")
-        
-        return "DB Connected"      
 
-    @app.route("/whatsapp", methods=["POST"])
-    def whatsapp_bot():  
+order_counter = 1000
+cart = {}
+selected_item = {}
+user_state = {}
+addons = {
+    "paneer butter masala":[
+        "butter roti",
+        "mix veg",
+        "dal tadka",
+        "cold drink"
+        
+    ],
+    "veg biryani":[
+        "cold drink",
+        "mutton curry",
+        "chicken curry"
+    ],
+    "coffee":[
+        "brownie",
+        "ice cream"
+    ],
+    "samosa":[
+        "cold drink",
+        "tea",
+        "coffee"
+    ],
+     "mix veg":[
+         "butter roti",
+         "dal tadka",
+         "fresh lime"
+     ]
+
+}
+
+   
+   # data["items"] = {k.lower(): v for k, v in data["items"].items()    
+    
+@app.route("/")
+def home():
+        return "Service is running"
+
+    
+@app.route("/whatsapp", methods=["POST"])
+def whatsapp_bot():  
         resp = MessagingResponse()
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
@@ -203,7 +182,7 @@ with open(data_path, "r" ,
             text = "*Categories*\n"
             for cat in data["categories"]:
                 text += f"-{cat}\n"
-            resp.message(text)
+            resp.message(text)    
             return str(resp)
         
         elif msg.lower() in data["categories"].keys():
@@ -349,8 +328,8 @@ with open(data_path, "r" ,
               return str(resp)
             
                 
-    @app.route("/admin")
-    def admin_dashboard():
+@app.route("/admin")
+def admin_dashboard():
         
 
       try:
