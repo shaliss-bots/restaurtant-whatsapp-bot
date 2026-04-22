@@ -1,4 +1,4 @@
-from flask import Flask, request 
+from flask import Flask, request, Response 
 from twilio.twiml.messaging_response import MessagingResponse
 from dotenv import load_dotenv
 import json
@@ -130,7 +130,7 @@ def whatsapp_bot():
             else:
                 resp.message("bot working")        
                     
-        return str(resp)          
+        return Response(str(resp),mimetype="application/xml")         
                     
         
         # quantity
