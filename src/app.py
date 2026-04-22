@@ -130,7 +130,7 @@ def whatsapp_bot():
             else:
                 resp.message("bot working")        
                     
-        return Response(str(resp),mimetype="application/xml")            
+        return str(resp)          
                     
         
         # quantity
