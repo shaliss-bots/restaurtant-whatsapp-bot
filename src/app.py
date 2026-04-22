@@ -93,6 +93,7 @@ addons = {
 
 }
 
+
    
    # data["items"] = {k.lower(): v for k, v in data["items"].items()    
     
@@ -106,9 +107,31 @@ def whatsapp_bot():
         resp = MessagingResponse()
         sender = request.values.get("From")
         phone = sender.replace("whatsapp:", "")
-        today = datetime.now().strftime("%Y-%m-%d")
+        
+        #today = datetime.now().strftime("%Y-%m-%d")
         msg = request.values.get("Body","").lower()
-        all_items = list(data["items"].keys())
+        #all_items = list(data["items"].keys()) 
+        
+        if not msg:
+            resp.message("send something")
+        
+        else:
+            msg = msg.lower()    
+            
+            if user_state.get(phone) == "waiting_quantity":
+                msg_clean = msg.replace("plates", "").replace("plate","").strip()
+              
+                if not msg_clean.isdigit():
+                    resp.message("Enter number only(1,2,3...)")
+                    
+                else: 
+                    resp.message("Quantity received")  
+                    
+            else:
+                resp.message("bot working")        
+                    
+        return Response(str(resp),mimetype="application/xml")            
+                    
         
         # quantity
         if user_state.get(phone) == "waiting_quantity":
